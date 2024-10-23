@@ -1,0 +1,77 @@
+
+.navbar {
+    background-color: #eff9f9;
+    padding: 20px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand img {
+    max-width: 70px;
+    margin-right: 10px;
+}
+
+.navbar-brand h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    color: #002e5e;
+}
+
+.navbar-brand h1 span {
+    display: block;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.nav-link {
+    color: #000;
+    font-size: 18px;
+    font-weight: 450;
+    transition: color all 0.3s, font-weight all 0.3s;
+}
+
+.nav-link:hover {
+    color: #002e5e;
+    font-weight: 600;
+    transform: scale(1.1);
+
+}
+
+.btn-login {
+    background-color: #002e5e;
+    color: #01CFC9;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+    transform: scale(1.1);
+}
+.container{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 12%;
+
+}
+.container .texto{
+    height: 300px;
+    width: 350px;
+    border: 1px solid #01CFC9;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+}
+.container .texto .pregunta{
+    width: 70%;
+}
+
