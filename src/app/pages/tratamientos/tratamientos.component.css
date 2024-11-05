@@ -1,0 +1,33 @@
+
+
+.container{
+    background-color: #002e5e;
+    border-radius: 30px;
+    padding: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+.container .tratamiento{
+    width: 40%;
+}
+.container .tratamiento h1{
+    color: #01CFC9;
+}
+.container .tratamiento p{
+    color: white;
+}
+.container .tratamiento ul li{
+    color: white;
+}
+.container .imagen{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container .imagen img{
+    border-radius: 20px;
+    height: 285px;
+    width: 490px;
+}

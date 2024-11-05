@@ -1,6 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
+
 body {
     margin: auto;
     padding: auto;
     background-color: #EAF7F9;
+}
+:root {
+    --header-height: 3rem;
+    --nav-width: 68px;
+    --first-color: #112862;
+    --first-color-light: #d2c6ff;
+    --white-color: #F7F6FB;
+    --body-font: 'Nunito', sans-serif;
+    --normal-font-size: 1rem;
+    --z-fixed: 100
 }

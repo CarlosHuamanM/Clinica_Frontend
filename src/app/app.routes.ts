@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 import { InicioComponent } from './pages/inicio/inicio.component';
 import { IniciosesionComponent } from './pages/login/iniciosesion/iniciosesion.component';
-import { RegistroComponent } from './register/registro/registro.component';
-import { TratamientosComponent } from './tratamientos/tratamientos.component';
+import { RegistroComponent } from './pages/registro/registro.component';
 import { BlogComponent } from './pages/blog/blog.component';
 import { ReservaComponent } from './pages/reserva/reserva.component';
+import { TratamientosComponent } from './pages/tratamientos/tratamientos.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'inicio', pathMatch: 'full' },

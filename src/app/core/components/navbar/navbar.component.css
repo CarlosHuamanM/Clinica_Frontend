@@ -31,7 +31,7 @@
     color: #000;
     font-size: 18px;
     font-weight: 450;
-    transition: color all 0.3s, font-weight all 0.3s;
+    transition: color 0.3s ease-in-out, font-weight 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .nav-link:hover {
@@ -52,36 +52,4 @@
 
 .btn-login:hover {
     transform: scale(1.1);
-}
-
-.container{
-    background-color: #002e5e;
-    border-radius: 30px;
-    padding: 30px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 50px;
-}
-.container .tratamiento{
-    width: 40%;
-}
-.container .tratamiento h1{
-    color: #01CFC9;
-}
-.container .tratamiento p{
-    color: white;
-}
-.container .tratamiento ul li{
-    color: white;
-}
-.container .imagen{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.container .imagen img{
-    border-radius: 20px;
-    height: 285px;
-    width: 490px;
 }
