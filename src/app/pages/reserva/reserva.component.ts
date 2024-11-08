@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewChildren } from '@angular/core';
 
 @Component({
   selector: 'app-reserva',
@@ -7,15 +7,26 @@ import { Component } from '@angular/core';
   templateUrl: './reserva.component.html',
   styleUrl: './reserva.component.css'
 })
-export class ReservaComponent {
-  paginaActual: number = 1;
+export class ReservaComponent implements OnInit{
 
-  motivoConsulta: string = '';
-  especialidad: string = '';
-  profesional: string = '';
+  @ViewChild('bodypd') bodypd!: ElementRef;
+  @ViewChild('header') header!: ElementRef;
+  @ViewChild('navbar') navBar!: ElementRef;
+  @ViewChild('headertoggle') headerToggle!: ElementRef;
+  @ViewChildren('navlink') navLinks!: ElementRef;
 
-  cambiarPagina(pagina: number): void {
-    this.paginaActual = pagina;
+  constructor() { }
+
+  ngOnInit() {
+    
   }
+
+  showNavbar(){
+      this.navBar.nativeElement.classList.toggle('show')
+      this.headerToggle.nativeElement.classList.toggle('bx-x')
+      this.bodypd.nativeElement.classList.toggle('body-pd')
+      this.header.nativeElement.classList.toggle('body-pd')
+  }
+
 }
 

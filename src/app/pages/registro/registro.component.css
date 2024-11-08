@@ -1,46 +1,56 @@
+.invalid {
+    border: 2px solid rgb(169, 0, 0) !important;
+}
+
+.button-invalid{
+    cursor: not-allowed !important;
+}
 
 .iniciosesion {
-    display: flex; 
-    height: 100vh; 
+    display: flex;
+    height: 100vh;
 }
 
 .ventana {
-    width: 50%; 
+    width: 50%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .ventana img {
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .login {
-    width: 50%; 
+    width: 50%;
     display: flex;
     flex-direction: column;
-    justify-content: center; 
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
 }
 
 .login1 {
     display: flex;
     flex-direction: column;
-    background-color: #C4C4C4;
+    background-color: #dbdbdb;
     border-radius: 15px;
-    padding: 5%;
+    padding: 15px 40px;
     text-align: left;
-    width: 80%; 
+    width: 100%;
     max-width: 500px;
-     
+    overflow-y: auto;
 }
-.login .login1 p{
+
+.login .login1 p {
     color: #002e5e;
     font-weight: 700;
 }
-.titulo{
+
+.titulo {
     border: 2px solid #002e5e;
     height: 50px;
     border-top: none;
@@ -58,77 +68,92 @@
     margin-bottom: 10px;
 }
 
-.login .login1 label{
+.login .login1 label {
     color: #002e5e;
     margin-bottom: 5px;
 }
-.login .login1 input{
+
+.login .login1 input {
     margin-bottom: 20px;
     padding: 9px;
     border-radius: 5px;
     border: 1px solid cadetblue;
     background-color: #FFFFFF;
 }
-.login .login1 .boton{
+small{
+    font-size: 10px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+.login .login1 .boton {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.login .login1 .boton button{
+
+.login .login1 .boton button {
     width: 420px;
     border: 1px solid #A5D9D0;
     border-radius: 5px;
     padding: 9px;
-    background-color: #A5D9D0; 
-    background-image: linear-gradient(90deg, transparent 50%, #395651 50%);
-    background-size: 200%;
-    transition: background 0.5s ease; 
-}
-.login .login1 .boton button:hover{
-    background-position: -100%;
-    transition: background-position 0.5s ease;
+    background-color: #A5D9D0;
 }
 
-.login .login1 .nologin{
+.login .login1 .nologin {
     margin-top: 13px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.login .login1 .nologin u{
+
+.login .login1 .nologin u {
     color: #002e5e;
 }
 
-.login .login2{
+.login .login2 {
     display: flex;
-    gap:10px;
+    gap: 10px;
 
 }
-.login .login2 div{
+
+.login .login2 div {
     width: 50%;
-
 }
-.login .login2 select, 
+.showpassword, .showpassword>button{
+    margin-top: 5px;
+    width: 100%;
+}
+.btn-showpassword{
+    background-color: #A5D9D0;
+    outline: 1px solid #000000;
+}
+
+.login .login2 select,
 .login .login1 input {
-    width: 100%; 
+    width: 100%;
     padding: 9px;
     border-radius: 5px;
     border: 1px solid cadetblue;
     background-color: #FFFFFF;
+    margin-bottom: 0;
+}
+
+.gender {
     margin-bottom: 10px;
 }
 
-.gender{
-    margin-bottom: 10px;
-}
-.gender input{
+.gender input {
     margin-left: 10px;
     margin-right: 10px;
 }
-.gender label{
+
+.gender label {
     margin-left: 10px;
     margin-right: 10px;
 }
+
 .gender input[type="radio"] {
     display: none;
 }
@@ -137,7 +162,7 @@
     cursor: pointer;
     position: relative;
     padding-left: 25px;
-    margin-right: 20px; 
+    margin-right: 20px;
     font-size: 16px;
 }
 
@@ -154,17 +179,17 @@
     transform: translateY(-50%);
 }
 
-.gender input[type="radio"]:checked + label::before {
-    background-color: indigo; 
-    border-color: indigo; 
+.gender input[type="radio"]:checked+label::before {
+    background-color: indigo;
+    border-color: indigo;
 }
 
-.gender input[type="radio"]:checked + label::after {
+.gender input[type="radio"]:checked+label::after {
     content: "";
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: white; 
+    background-color: white;
     position: absolute;
     left: 5.2px;
     top: 50%;
@@ -172,46 +197,53 @@
 }
 
 .gender label {
-    margin-right: 10px; 
+    margin-right: 10px;
 }
-.login .volver a{
+
+.login .volver a {
     color: #002e5e;
 }
 
 
-@media(max-width: 1024px){
-    .iniciosesion{
+@media(max-width: 1024px) {
+    .iniciosesion {
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
-    .iniciosesion .ventana{
+
+    .iniciosesion .ventana {
         justify-content: center;
         height: 120px;
         width: 120px;
         margin-bottom: 15px;
     }
-    .iniciosesion .login{
+
+    .iniciosesion .login {
         width: 80%;
     }
 
 }
-@media (max-width:768px){
-    .iniciosesion{
+
+@media (max-width:768px) {
+    .iniciosesion {
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
-    .iniciosesion .ventana{
+
+    .iniciosesion .ventana {
         justify-content: center;
         height: 120px;
         width: 120px;
         margin-bottom: 15px;
     }
-    .iniciosesion .login{
+
+    .iniciosesion .login {
         width: 80%;
     }
-    .login2 label[for="password"]{
+
+    .login2 label[for="password"] {
         margin-top: 25px;
     }
 
