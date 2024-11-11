@@ -14,8 +14,12 @@ export class IniciosesionComponent {
 
   authService = inject(AuthService);
 
+  showPassword = false;
+
   loginform= new FormGroup({
-    correo:new FormControl('', [Validators.required, Validators.email]),
+    correo:new FormControl('', [Validators.required, Validators.email,
+      Validators.pattern('^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@gmail.com$')
+    ]),
     contrasena: new FormControl('')
   });
   constructor(private router: Router) { }

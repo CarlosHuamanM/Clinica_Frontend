@@ -9,7 +9,7 @@
             </div>
             <p>Bienvenido a la Clinica Dental Villegas</p>
             <form [formGroup]="registerForm" (ngSubmit)="enviarCodigoVerificacion()">
-                <label for="email">Correo Electrónico:</label>
+                <label for="email">Correo Electrónico (Gmail):</label>
                 <input type="email" id="email" class="form-control" formControlName="email"
                     placeholder="Ingresa tu correo electrónico" required
                     [class]="{'invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}">
@@ -61,6 +61,7 @@
                 <label for="nms">Nombres</label>
                 <input id="nms" type="text" formControlName="nombres" class="form-control"
                     placeholder="Ingresa tus nombres" required
+                    [readOnly]="mostrarBotonDni"
                     [class]="{'invalid': registerForm.get('nombres')?.invalid && registerForm.get('nombres')?.touched}">
                 <small class="form-text text-danger"
                     [hidden]="!registerForm.get('nombres')?.invalid || !registerForm.get('nombres')?.touched">El campo
@@ -70,6 +71,7 @@
                         <label for="alp">Apellido Paterno</label>
                         <input id="alp" type="text" class="form-control" formControlName="apellidoPaterno"
                             placeholder="Ingresa tu apellido" required
+                            [readOnly]="mostrarBotonDni"
                             [class]="{'invalid': registerForm.get('apellidoPaterno')?.invalid && registerForm.get('apellidoPaterno')?.touched}">
                         <small class="form-text text-danger"
                             [hidden]="!registerForm.get('apellidoPaterno')?.invalid || !registerForm.get('apellidoPaterno')?.touched">El
@@ -79,6 +81,7 @@
                         <label for="alm">Apellido Materno</label>
                         <input id="alm" type="text" class="form-control" formControlName="apellidoMaterno"
                             placeholder="Ingresa tu apellido" required
+                            [readOnly]="mostrarBotonDni"
                             [class]="{'invalid': registerForm.get('apellidoMaterno')?.invalid && registerForm.get('apellidoMaterno')?.touched}">
                         <small class="form-text text-danger"
                             [hidden]="!registerForm.get('apellidoMaterno')?.invalid || !registerForm.get('apellidoMaterno')?.touched">El
@@ -123,7 +126,7 @@
 
                 <div class="boton">
                     <button type="submit" [class]="{'button-invalid': registerForm.invalid}"
-                        [disabled]="registerForm.invalid">Iniciar Sesión</button>
+                        [disabled]="registerForm.invalid">Registrar</button>
                 </div>
             </form>
 

@@ -31,7 +31,9 @@ export class RegistroComponent implements OnInit {
   @ViewChild('modal') modal!: ModalComponent;
 
   registerForm = new FormGroup({
-    email: new FormControl('', [Validators.required,Validators.email]),
+    email: new FormControl('', [Validators.required,Validators.email,
+      Validators.pattern('^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@gmail.com$')
+    ]),
     tipodocumento: new FormControl('', Validators.required),
     documento: new FormControl('', Validators.required),
     nombres: new FormControl('', Validators.required),
