@@ -31,7 +31,11 @@
                     <a class="nav-link" href="#">Contactos</a>
                 </li>
             </ul>
-            <a href="iniciosesion" class="btn btn-login">Iniciar sesión</a>
+            @if (userRole) {
+                <app-user-card [userNames]="nombresUsuario" [rol]="userRole" [image]="imagenPerfil"></app-user-card>
+            }@else {
+                <a href="iniciosesion" class="btn btn-login">Iniciar sesión</a>
+            }
         </div>
     </div>
 </nav>

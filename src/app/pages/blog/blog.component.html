@@ -11,12 +11,12 @@
         <div class="pregunta">
             <p>¿Sabías qué y cuales son los malos hábitos orales?</p>
         </div>
-    </div>    
+    </div>
     <div class="texto">
         <img src="" alt="">
         <div class="pregunta">
-        <p>¿Sabías qué y cuales son los malos hábitos orales?</p>
-    </div>
+            <p>¿Sabías qué y cuales son los malos hábitos orales?</p>
+        </div>
     </div>
 </div>
 <div class="container">
@@ -31,12 +31,12 @@
         <div class="pregunta">
             <p>¿Sabías qué y cuales son los malos hábitos orales?</p>
         </div>
-    </div>    
+    </div>
     <div class="texto">
         <img src="" alt="">
         <div class="pregunta">
-        <p>¿Sabías qué y cuales son los malos hábitos orales?</p>
-    </div>
+            <p>¿Sabías qué y cuales son los malos hábitos orales?</p>
+        </div>
     </div>
 </div>
 <div class="container">
@@ -51,11 +51,27 @@
         <div class="pregunta">
             <p>¿Sabías qué y cuales son los malos hábitos orales?</p>
         </div>
-    </div>    
+    </div>
     <div class="texto">
         <img src="" alt="">
         <div class="pregunta">
-        <p>¿Sabías qué y cuales son los malos hábitos orales?</p>
+            <p>¿Sabías qué y cuales son los malos hábitos orales?</p>
+        </div>
     </div>
+</div>
+
+
+<div class="d-flex flex-column justify-content-center comentarios">
+    @if (userRole === 'PACIENTE') {
+    <div class="comentario-card card">
+        <input type="text" class="form-control input-cometario" [formControl]="preguntaPaciente"
+            placeholder="Escribe tu comentario aquí...">
+        <button class="btn btn-primary btn-comentario" (click)="comentar()" [disabled]="preguntaPaciente.invalid"
+            style="background-color: #c7f3f3; color: #146356; border: 1px solid #a0d8c3;">Comentar</button>
     </div>
+    }
+    @for (comentario of comentarios | async; track $index) {
+    <app-question [pregunta]="comentario" [disabledButton]="disabledButton" [userId]="userId"
+        [userRole]="userRole" (recargarComentarios)="recargarComentarios()"></app-question>
+    }
 </div>

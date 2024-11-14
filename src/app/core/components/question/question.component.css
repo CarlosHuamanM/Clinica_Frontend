@@ -1,0 +1,50 @@
+.comentario-card {
+    width: 80%;
+    border-radius: 15px;
+    border: 1px solid #c7f3f3;
+    background-color: #f0f9f9;
+}
+.user-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #a0d8c3;
+}
+.respuesta-card{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    width: 100%;
+    background-color: #f0f9f9;
+    margin-block: 10px;
+    gap: 10px;
+}
+.user-name {
+    font-weight: bold;
+    color: #333333;
+}
+
+.comment-text {
+    background-color: #c2d1e3;
+    color: white;
+    padding: 10px;
+    border-radius: 15px;
+    font-size: 16px;
+}
+
+.responder-btn {
+    background-color: #a0d8c3;
+    border: none;
+    color: white;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.responder-btn:hover {
+    background-color: #8fc0b0;
+}
+app-answer{
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}

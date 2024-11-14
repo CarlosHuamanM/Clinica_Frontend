@@ -28,7 +28,7 @@ export class IniciosesionComponent {
     this.authService.login(this.loginform.get('correo')?.value ?? '',this.loginform.get('contrasena')?.value ?? '').subscribe({
       next: (response) => {
         localStorage.setItem('token', response.token);
-        this.router.navigate(['/reserva']);
+        this.router.navigate(['/dashboard/reserva']);
       },
       error: (error) => {
         console.log('Error durante el login:' + error.message);

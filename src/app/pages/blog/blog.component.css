@@ -20,4 +20,21 @@
 .container .texto .pregunta{
     width: 70%;
 }
-
+.comentario-card{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    width: 80%;
+    background-color: #f0f9f9;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+.comentarios{
+    align-items: center;
+    margin-top: 20px;
+}
+app-question{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

@@ -1,0 +1,25 @@
+<div class="comentario-card p-3 mb-3">
+    <div class="d-flex align-items-start">
+        <img src="media/logo.jpg" alt="User profile" class="user-img me-3" />
+        <div class="flex-grow-1">
+            <div class="user-name">{{pregunta.nombresUsuario}}-{{pregunta.emailUsuario}}</div>
+            <p class="comment-text mt-2">
+                {{pregunta.contenido}}
+            </p>
+            <div class="d-flex justify-content-end text-muted mt-2" style="gap: 10px;">
+                <small>{{pregunta.fecha}}</small>
+                <small>{{pregunta.comentarios.length}} respuestas</small>
+                <button class="btn btn-sm responder-btn ms-3" [hidden]="disabledButton" (click)="showResponseBox()">Responder</button>
+            </div>
+        </div>
+    </div>
+    <div class="respuesta-card card" [hidden]="disabledReponse">
+        <input type="text" class="form-control input-cometario" [formControl]="respuestaDentista"
+            placeholder="Escribe tu comentario aquí..." (focus)="trackedQuestionId = pregunta.id" />
+        <button class="btn btn-primary btn-comentario" (click)="comentar()" [disabled]="respuestaDentista.invalid"
+            style="background-color: #c7f3f3; color: #146356; border: 1px solid #a0d8c3;">Responder</button>
+    </div>
+    @for (respuesta of pregunta.comentarios; track $index) {
+        <app-answer [respuesta]="respuesta"></app-answer>
+    }
+</div>

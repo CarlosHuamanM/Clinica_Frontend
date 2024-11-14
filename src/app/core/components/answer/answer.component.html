@@ -1,0 +1,14 @@
+<div class="respuesta-card p-3 mb-2">
+    <div class="d-flex align-items-start justify-content-end">
+        <div class="flex-grow-1">
+            <div class="respuesta-user-name">{{respuesta.nombresUsuario}}-{{respuesta.emailUsuario}}</div>
+            <p class="respuesta-text mt-2">
+                {{respuesta.contenido}}
+            </p>
+            <div class="text-muted mt-2 text-end">
+                <small>{{respuesta.fecha}}</small>
+            </div>
+        </div>
+        <img [src]="respuesta.imagenUsuario" alt="User profile" class="respuesta-user-img ms-3" />
+    </div>
+</div>

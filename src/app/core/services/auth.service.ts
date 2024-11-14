@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { JwtResponse } from '../interfaces/jwt-response';
 import { Observable } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -45,5 +46,49 @@ export class AuthService {
         dni: documento
       }
     });
+  }
+
+  getUserRole(): any {
+    if (typeof window !== 'undefined' && localStorage.getItem('token')){
+      const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
+      if (token) {
+        const decodedToken: any = jwtDecode(token);
+        return decodedToken.role;
+      }
+    }
+    return null;
+  }
+
+  getUserId(): any {
+    if (typeof window !== 'undefined' && localStorage.getItem('token')){
+      const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
+      if (token) {
+        const decodedToken: any = jwtDecode(token);
+        return decodedToken.id;
+      }
+    }
+    return null;
+  }
+
+  getNames(): any {
+    if (typeof window !== 'undefined' && localStorage.getItem('token')){
+      const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
+      if (token) {
+        const decodedToken: any = jwtDecode(token);
+        return decodedToken.nombres;
+      }
+    }
+    return null;
+  }
+
+  getImagenPerfil(): any {
+    if (typeof window !== 'undefined' && localStorage.getItem('token')){
+      const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
+      if (token) {
+        const decodedToken: any = jwtDecode(token);
+        return decodedToken.imagenPerfil;
+      }
+    }
+    return null;
   }
 }

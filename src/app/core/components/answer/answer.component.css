@@ -1,0 +1,27 @@
+.respuesta-card {
+    width: 80%;
+}
+
+.respuesta-user-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #a0d8c3;
+}
+
+.respuesta-user-name {
+    font-weight: bold;
+    color: #333333;
+    text-align: right;
+}
+
+.respuesta-text {
+    padding: 10px;
+    border-radius: 15px;
+    font-size: 16px;
+    text-align: right;
+}
+
+.text-end {
+    text-align: right;
+}

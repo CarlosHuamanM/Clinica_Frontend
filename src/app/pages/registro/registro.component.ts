@@ -159,7 +159,7 @@ export class RegistroComponent implements OnInit {
       this.registerForm.get('sexo')?.value ?? '').subscribe({
       next: (response) => {
         localStorage.setItem('token', response.token);
-        this.router.navigate(['/reserva']);
+        this.router.navigate(['/dashboard/reserva']);
       },
       error: (error) => {
         console.log('Error durante el registro:' + error.message);
