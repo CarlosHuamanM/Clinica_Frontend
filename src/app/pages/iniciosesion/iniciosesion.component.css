@@ -80,10 +80,24 @@ form{
     margin-block: 5px;
     width: 100%;
 }
-.btn-showpassword{
-    background-color: #A5D9D0;
-    outline: 1px solid #000000;
+.showpassword input{
+    width: 100%;
 }
+
+.showpassword{
+    display: flex;
+}
+.showpassword input{
+    width: 100%;
+    position: relative;
+}
+.showpassword button{
+    width: 10%;
+    position: absolute;
+    transform: translateX(310px);
+    border: none;
+}
+
 .login .login1 form input{
     margin-bottom: 10px;
     padding: 9px;
