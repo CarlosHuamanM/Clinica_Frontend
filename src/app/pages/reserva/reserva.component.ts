@@ -1,5 +1,5 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { AsyncPipe, isPlatformBrowser } from '@angular/common';
+import { Component, inject, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions } from '@fullcalendar/core/index.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -7,37 +7,55 @@ import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { StepperComponent } from '../../core/components/stepper/stepper.component';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { Tratamiento } from '../../core/interfaces/tratamiento';
+import { TratamientoService } from '../../core/services/tratamiento.service';
+import { DentistaService } from '../../core/services/dentista.service';
+import { Dentista } from '../../core/interfaces/dentista';
+import { TipoTratamiento } from '../../core/interfaces/tipo-tratamiento';
+import { Horario } from '../../core/interfaces/horario';
+import { HorarioService } from '../../core/services/horario.service';
+import { DatepickerComponent } from '../../core/components/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-reserva',
   standalone: true,
-  imports: [FullCalendarModule, StepperComponent],
+  imports: [FullCalendarModule, StepperComponent, AsyncPipe, ReactiveFormsModule, DatepickerComponent],
   templateUrl: './reserva.component.html',
   styleUrl: './reserva.component.css'
 })
 export class ReservaComponent implements OnInit {
 
-  reservaForm = new FormGroup({
-    tipo: new FormGroup({
-      tratamientoId: new FormControl(''),
-      especialidad: new FormControl(''),
-      dentistaId: new FormControl('')
-    }),
-    horario: new FormGroup({
-      fecha: new FormControl(''),
-      hora: new FormControl('')
-    }),
-    paciente: new FormGroup({
-      nombres: new FormControl(''),
-      apellidoPaterno: new FormControl(''),
-      apellidoMaterno: new FormControl(''),
-      tipoDocumento: new FormControl(''),
-      numeroIdentidad: new FormControl(''),
-      sexo: new FormControl(''),
-      fechaNacimiento: new FormControl('')
-    })
-  });
+  tratamientos!: Observable<Tratamiento[]>;
+  especialidades!: Observable<String[]>;
+  dentistas!: Observable<Dentista[]>;
+  tiposTratamientos!: Observable<TipoTratamiento[]>;
+  horarios!: Observable<Horario[]>;
+
+  tratamientoService = inject(TratamientoService);
+  dentistaService = inject(DentistaService);
+  horariosService = inject(HorarioService);
+
+  diasDisponibles: number[] = [];
+  horaInicio: string = '';
+  horaFin: string = '';
+
+  disabledDates = [
+    new Date(2024, 1, 5), 
+    new Date(2024, 10, 15), 
+    new Date(2024, 10, 25)
+  ];
+
+  reservaForm: FormGroup;
+
+  ngOnInit() {
+    
+    this.tratamientos = this.tratamientoService.getTratamientos({});
+    this.tiposTratamientos = this.tratamientoService.getTiposTratamientos();
+    this.especialidades = this.dentistaService.getEspecialidades();
+    this.dentistas = this.dentistaService.getDentistas({});
+  }
 
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
@@ -65,12 +83,85 @@ export class ReservaComponent implements OnInit {
 
   isBrowser: boolean;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private fb: FormBuilder) {
     this.isBrowser = isPlatformBrowser(this.platformId);
+    this.reservaForm = this.fb.group({
+      tipo: this.fb.group({
+        tipoTratamiento: ['', Validators.required],
+        tratamientoId: [{ value: '', disabled: true }, Validators.required],
+        especialidad: ['', Validators.required],
+        dentistaId: [{ value: '', disabled: true }, Validators.required]
+      }),
+      horario: this.fb.group({
+        fecha: [null],
+        hora: [{ value: '', disabled: true }, Validators.required]
+      }),
+      paciente: this.fb.group({
+        nombres: [''],
+        apellidoPaterno: [''],
+        apellidoMaterno: [''],
+        tipoDocumento: [''],
+        numeroIdentidad: [''],
+        sexo: [''],
+        fechaNacimiento: ['']
+      })
+    });
   }
-  ngOnInit() {
 
+  convertirDuracionAMinutos(duracionISO: string): number {
+    let minutos = 0;
+    const match = duracionISO.match(/PT(\d+H)?(\d+M)?/);
+  
+    if (match) {
+      if (match[1]) {
+        minutos += parseInt(match[1]) * 60;
+      }
+      if (match[2]) {
+        minutos += parseInt(match[2]);
+      }
+    }
+  
+    return minutos;
   }
 
+  buscarDentistaPorEspecialidad(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    const especialidad = target.value;
+    const queryparams = {
+      especialidad: especialidad
+    };
+    this.dentistas = this.dentistaService.getDentistas(queryparams);
+    this.reservaForm.get('tipo')?.get('dentistaId')?.enable();
+  }
+
+  buscarTipoTratamiento(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    const tipoTratamiento = target.value;
+    const queryparams = {
+      tipo: tipoTratamiento
+    };
+    this.tratamientos = this.tratamientoService.getTratamientos(queryparams);
+    this.reservaForm.get('tipo')?.get('tratamientoId')?.enable();
+  }
+
+  establecerHorariosPorDentista(event: Event){
+    const target = event.target as HTMLSelectElement;
+    const dentistaId = target.value;
+    const queryparams = {
+      dentistaId: dentistaId
+    };
+    this.horarios = this.horariosService.getHorarios(queryparams);
+    this.reservaForm.get('horario')?.get('fecha')?.enable();
+    this.reservaForm.get('horario')?.get('hora')?.enable();
+  }
+
+  handleDateSelected(date: Date){
+    this.reservaForm.get('horario')?.get('fecha')?.setValue(date);
+    this.reservaForm.get('horario')?.get('hora')?.enable();
+  }
+
+  mostrarFormulario(){
+    console.log(this.reservaForm);
+  }
 }
 

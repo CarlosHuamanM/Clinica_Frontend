@@ -1,32 +1,49 @@
 <div class="container-dashboard">
-    <app-stepper>
+    <app-stepper [formGroup]="reservaForm">
         <ng-template #step>
-            <label for="tratamiento-label" class="form-label">Selecciona un tratamiento:</label>
-            <select id="tratamiento-label" class="form-select" aria-label="Default select example">
-                <option selected>Select</option>
-                <option value="1">Opción 1</option>
-                <option value="2">Opción 2</option>
-                <option value="3">Opción 3</option>
-            </select>
-            <label for="especialidad-label" class="form-label">Selecciona una especialidad:</label>
-            <select id="especialidad-label" class="form-select" aria-label="Default select example">
-                <option selected>Select</option>
-                <option value="1">Opción 1</option>
-                <option value="2">Opción 2</option>
-                <option value="3">Opción 3</option>
-            </select>
-            <label for="medico-label" class="form-label">Selecciona un dentista:</label>
-            <select id="medico-label" class="form-select" aria-label="Default select example">
-                <option selected>Select</option>
-                <option value="1">Opción 1</option>
-                <option value="2">Opción 2</option>
-                <option value="3">Opción 3</option>
-            </select>
+            <div formGroupName="tipo">
+                <label for="tipo-tratamiento-label" class="form-label">Selecciona un tipo de tratamiento:</label>
+                <select id="tipo-tratamiento-label" class="form-select" (change)="buscarTipoTratamiento($event)"
+                    formControlName="tipoTratamiento" aria-label="Default select example">
+                    @for (tipoTratamiento of tiposTratamientos | async; track $index) {
+                    <option value="{{tipoTratamiento.id}}">{{tipoTratamiento.nombre}}</option>
+                    }
+                </select>
+                <label for="tratamiento-label" class="form-label mt-3">Selecciona un tratamiento:</label>
+                <select id="tratamiento-label" class="form-select" formControlName="tratamientoId">
+                    @for (tratamiento of tratamientos | async; track $index) {
+                    <option value="{{tratamiento.id}}">{{tratamiento.nombre}}
+                        ({{convertirDuracionAMinutos(tratamiento.duracion)}} mins)</option>
+                    }
+                </select>
+                <label for="especialidad-label" class="form-label mt-3">Selecciona una especialidad:</label>
+                <select id="especialidad-label" class="form-select" formControlName="especialidad"
+                    (change)="buscarDentistaPorEspecialidad($event)" aria-label="Default select example">
+                    @for (especialidad of especialidades | async; track $index) {
+                    <option value="{{especialidad}}">{{especialidad}}</option>
+                    }
+                </select>
+                <label for="medico-label" class="form-label mt-3">Selecciona un dentista:</label>
+                <select id="medico-label" class="form-select" formControlName="dentistaId"
+                    (change)="establecerHorariosPorDentista($event)"
+                    aria-label="Default select example">
+                    @for (dentista of dentistas | async; track $index) {
+                    <option value="{{dentista.id}}">{{dentista.apellidoPaterno}} {{dentista.apellidoMaterno}},
+                        {{dentista.nombres}}</option>
+                    }
+                </select>
+            </div>
         </ng-template>
 
         <ng-template #step>
-            <h3>Paso 2</h3>
-            <p>Contenido personalizado del paso 2</p>
+            <div formGroupName="horario">
+                <label for="fecha-inicio-label" class="form-label">Selecciona la fecha:</label>
+                <app-datepicker [disabledDates]="disabledDates" (dateSelected)="handleDateSelected($event)"></app-datepicker>
+                <label for="hora-label" class="form-label mt-5">Selecciona la hora:</label>
+                <input type="time" class="form-control" id="hora-label" formControlName="hora"
+                    aria-label="Default select example">
+            </div>
+            <button (click)="mostrarFormulario()">Mostrar formulario</button>
         </ng-template>
 
         <ng-template #step>
