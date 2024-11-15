@@ -1,25 +1,70 @@
 
 .container{
-    margin-top: 20px;
-    display: flex;
-    flex-direction: row;
-    gap: 12%;
+  display: grid;
+  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  max-width: 1300px;
+  width: 100%;
+  padding: 20px;
 
 }
 .container .texto{
-    height: 300px;
-    width: 350px;
-    border: 1px solid #01CFC9;
-    border-radius: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s;
+  height: 100%;
+}
+
+.texto:hover {
+    transform: scale(1.03);
+  }
+
+.container .texto .pregunta{
+    width: 100%;
+    text-align: ;
+} 
+.container .texto img{
+    width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+} 
+
+.pregunta {
+    padding: 20px;
     display: flex;
+    flex: 1;
     flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
+    justify-content: space-between;
     text-align: center;
 }
-.container .texto .pregunta{
-    width: 70%;
+
+
+.texto .pregunta h3{
+    font-size: 1.25rem;
+    color: #6a1b9a;
+    margin-bottom: 10px;
 }
+
+.texto .pregunta p{
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.5;
+    text-align: justify;
+}
+
+.texto .pregunta .card-footer{
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #888;
+}
+
 .comentario-card{
     display: flex;
     flex-direction: row;
@@ -38,3 +83,25 @@ app-question{
     display: flex;
     justify-content: center;
 }
+
+@media (max-width: 500px) {
+    .container{
+        grid-template-columns: 1fr;
+        padding: 10px;
+    }
+    .texto {
+      max-width: 90%;
+    }
+  
+    .texto .pregunta h3 {
+      font-size: 1.1rem;
+    }
+  
+    .texto .pregunta p {
+      font-size: 0.85rem;
+    }
+  
+    .card-footer {
+      font-size: 0.75rem;
+    }
+  }
