@@ -19,18 +19,18 @@
                 <small class="form-text text-danger"
                     [hidden]="!loginform.get('correo')?.invalid || !loginform.get('correo')?.touched">El
                     campo es requerido</small>
-                <label for="password">Contraseña:</label>
-                <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="contrasena"
-                    [class]="{'invalid': loginform.get('contrasena')?.invalid && loginform.get('contrasena')?.touched}"
-                    placeholder="Ingresa tu contraseña" required>
-                <small class="form-text text-danger"
+                    <small class="form-text text-danger"
                     [hidden]="!loginform.get('contrasena')?.invalid || !loginform.get('contrasena')?.touched">El
                     campo es requerido</small>
-                <div class="showpassword">
-                    <button type="button" (click)="showPassword = !showPassword" class="btn btn-showpassword">
-                        <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-                    </button>
-                </div>
+                    <label for="password">Contraseña:</label>
+                    <div class="showpassword">
+                        <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="contrasena"
+                        [class]="{'invalid': loginform.get('contrasena')?.invalid && loginform.get('contrasena')?.touched}"
+                        placeholder="Ingresa tu contraseña" required>
+                        <button type="button" (click)="showPassword = !showPassword" class="btn btn-showpassword">
+                            <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                        </button>
+                    </div>
                 <div class="boton">
                     <button type="submit" [class]="{'button-invalid': loginform.invalid}" class="btn btn-showpassword"
                         [disabled]="loginform.invalid">Iniciar Sesión</button>

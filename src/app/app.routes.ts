@@ -7,6 +7,7 @@ import { ReservaComponent } from './pages/reserva/reserva.component';
 import { TratamientosComponent } from './pages/tratamientos/tratamientos.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { roleGuard } from './core/guards/role.guard';
+import { HistorialComponent } from './pages/historial/historial.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'inicio', pathMatch: 'full' },
@@ -15,6 +16,7 @@ export const routes: Routes = [
     {path: 'registro', component: RegistroComponent},
     {path: 'tratamientos', component: TratamientosComponent},
     {path: 'blog', component: BlogComponent},
+    {path: 'historial', component: HistorialComponent},
     {path: 'dashboard' ,component: DashboardComponent, children: [
         {path: 'reserva' ,component: ReservaComponent, canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}}
     ]}
