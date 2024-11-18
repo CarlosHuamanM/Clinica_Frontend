@@ -1,12 +1,12 @@
 import { Component, ElementRef, inject, ViewChild, ViewChildren } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { UserCardComponent } from "../user-card/user-card.component";
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [UserCardComponent],
+  imports: [UserCardComponent, RouterLink, RouterLinkActive],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })

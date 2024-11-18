@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormControl,FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-iniciosesion',
@@ -13,6 +14,7 @@ import { Router } from '@angular/router';
 export class IniciosesionComponent {
 
   authService = inject(AuthService);
+  toastService = inject(ToastrService);
 
   showPassword = false;
 
@@ -32,7 +34,7 @@ export class IniciosesionComponent {
       },
       error: (error) => {
         console.log('Error durante el login:' + error.message);
-        alert(error.message);
+        this.toastService.error(error.message);
       }
     });
   }

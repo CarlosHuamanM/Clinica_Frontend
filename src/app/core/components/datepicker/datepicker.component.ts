@@ -10,6 +10,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class DatepickerComponent implements OnInit {
   @Input() disabledDates: Date[] = [];
+  @Input() minDate: Date | null = null;
+  @Input() maxDate: Date | null = null;
   @Output() dateSelected = new EventEmitter<Date>();
 
   currentDate: Date = new Date();
@@ -58,7 +60,7 @@ export class DatepickerComponent implements OnInit {
   }
 
   isDateDisabled(date: Date): boolean {
-    return this.disabledDates.some(d => d.toDateString() === date.toDateString());
+    return this.disabledDates.some(d => d.toDateString() === date.toDateString() || this.minDate && date < this.minDate || this.maxDate && date > this.maxDate);
   }
 
   isSelected(date: Date): boolean {

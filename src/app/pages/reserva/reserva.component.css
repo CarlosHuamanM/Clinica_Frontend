@@ -6,11 +6,15 @@
     padding: 10px;
     gap: 10px;
 }
-full-calendar{
-    width: 60%;
-}
+
 app-stepper{
     width: 30%;
+}
+app-calendar{
+    width: 60%;
+}
+input.invalid{
+    border: 1px solid red !important;
 }
 @media (width <= 1024px) {
     .container-dashboard{

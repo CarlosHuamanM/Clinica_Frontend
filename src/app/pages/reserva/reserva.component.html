@@ -1,5 +1,5 @@
 <div class="container-dashboard">
-    <app-stepper [formGroup]="reservaForm">
+    <app-stepper [formGroup]="reservaForm" [formTracked]="reservaForm">
         <ng-template #step>
             <div formGroupName="tipo">
                 <label for="tipo-tratamiento-label" class="form-label">Selecciona un tipo de tratamiento:</label>
@@ -25,8 +25,7 @@
                 </select>
                 <label for="medico-label" class="form-label mt-3">Selecciona un dentista:</label>
                 <select id="medico-label" class="form-select" formControlName="dentistaId"
-                    (change)="establecerHorariosPorDentista($event)"
-                    aria-label="Default select example">
+                    (change)="establecerHorariosPorDentista($event)" aria-label="Default select example">
                     @for (dentista of dentistas | async; track $index) {
                     <option value="{{dentista.id}}">{{dentista.apellidoPaterno}} {{dentista.apellidoMaterno}},
                         {{dentista.nombres}}</option>
@@ -37,21 +36,72 @@
 
         <ng-template #step>
             <div formGroupName="horario">
-                <label for="fecha-inicio-label" class="form-label">Selecciona la fecha:</label>
-                <app-datepicker [disabledDates]="disabledDates" (dateSelected)="handleDateSelected($event)"></app-datepicker>
-                <label for="hora-label" class="form-label mt-5">Selecciona la hora:</label>
-                <input type="time" class="form-control" id="hora-label" formControlName="hora"
-                    aria-label="Default select example">
+                <input type="text" class="form-control" value="{{selectedDate}}">
+                <app-datepicker [disabledDates]="disabledDates" [minDate]="minDate" [maxDate]="maxDate"
+                    (dateSelected)="handleDateSelected($event)"></app-datepicker>
+                <label for="hora-label" class="form-label mt-2">Selecciona la hora:</label>
+                <input type="time" class="form-control" id="hora-label" formControlName="hora" [min]="minTimeValue"
+                    [max]="maxTimeValue"
+                    [class]="{'is-invalid': reservaForm.get('horario')?.get('hora')?.invalid && reservaForm.get('horario')?.get('hora')?.touched}">
+                <small class="form-text text-danger"
+                    [hidden]="reservaForm.get('horario')?.get('hora')?.valid || !reservaForm.get('horario')?.get('hora')?.touched">El
+                    horario de atención es de {{horarioSelected?.horaComienzo}} a {{horarioSelected?.horaFin}}</small>
             </div>
-            <button (click)="mostrarFormulario()">Mostrar formulario</button>
         </ng-template>
 
         <ng-template #step>
-            <h3>Paso 3</h3>
-            <p>Contenido personalizado del paso 3</p>
+            <div formGroupName="paciente">
+                <label for="tipo-documento-label" class="form-label">Tipo de documento</label>
+                <select formControlName="tipoDocumento" class="form-select" id="tipo-documento-label"
+                    (change)="agregarValidadores($event)">
+                    @for (tipoDocumento of tiposDocumento | async; track $index) {
+                    <option value="{{tipoDocumento.acronimo}}">{{tipoDocumento.nombre}}</option>
+                    }
+                </select>
+
+                <label for="dni-paciente-label" class="form-label mt-2">Número de identidad:</label>
+                <input type="text" class="form-control" id="dni-paciente-label" formControlName="numeroIdentidad"
+                    [class]="{'is-invalid': reservaForm.get('paciente')?.get('numeroIdentidad')?.invalid && reservaForm.get('paciente')?.get('numeroIdentidad')?.touched}">
+                <small class="form-text text-danger"
+                    [hidden]="reservaForm.get('paciente')?.get('numeroIdentidad')?.valid || !reservaForm.get('paciente')?.get('numeroIdentidad')?.touched"></small>
+
+                <label for="nombre-paciente-label" class="form-label">Nombres del paciente:</label>
+                <input type="text" class="form-control" id="nombre-paciente-label" formControlName="nombres"
+                    [class]="{'is-invalid': reservaForm.get('paciente')?.get('nombres')?.invalid && reservaForm.get('paciente')?.get('nombres')?.touched}">
+                <small class="form-text text-danger"
+                    [hidden]="reservaForm.get('paciente')?.get('nombres')?.valid || !reservaForm.get('paciente')?.get('nombres')?.touched">El
+                    nombre del paciente es obligatorio.</small>
+
+                <label for="apellidop-paciente-label" class="form-label mt-2">Apellido paterno:</label>
+                <input type="text" class="form-control" id="apellidop-paciente-label" formControlName="apellidoPaterno"
+                    [class]="{'is-invalid': reservaForm.get('paciente')?.get('apellidoPaterno')?.invalid && reservaForm.get('paciente')?.get('apellidoPaterno')?.touched}">
+                <small class="form-text text-danger"
+                    [hidden]="reservaForm.get('paciente')?.get('apellidoPaterno')?.valid || !reservaForm.get('paciente')?.get('apellidoPaterno')?.touched">El
+                    apellido del paciente es obligatorio.</small>
+
+
+                <label for="apellidom-paciente-label" class="form-label mt-2">Apellido materno:</label>
+                <input type="text" class="form-control" id="apellidom-paciente-label" formControlName="apellidoMaterno"
+                    [class]="{'is-invalid': reservaForm.get('paciente')?.get('apellidoMaterno')?.invalid && reservaForm.get('paciente')?.get('apellidoMaterno')?.touched}">
+                <small class="form-text text-danger"
+                    [hidden]="reservaForm.get('paciente')?.get('apellidoMaterno')?.valid || !reservaForm.get('paciente')?.get('apellidoMaterno')?.touched">El
+                    apellido del paciente es obligatorio.</small>
+
+                <label for="fecha-nacimiento-label" class="form-label mt-2">Fecha de nacimiento:</label>
+                <input type="date" class="form-control" id="fecha-nacimiento-label" formControlName="fechaNacimiento"
+                    [class]="{'is-invalid': reservaForm.get('paciente')?.get('fechaNacimiento')?.invalid && reservaForm.get('paciente')?.get('fechaNacimiento')?.touched}">
+                <small class="form-text text-danger"
+                    [hidden]="reservaForm.get('paciente')?.get('fechaNacimiento')?.valid || !reservaForm.get('paciente')?.get('fechaNacimiento')?.touched">La
+                    fecha de nacimiento es obligatoria.</small>
+
+                <div class="gender">
+                    <input type="radio" formControlName="sexo" id="masculino" value="MASCULINO" checked>
+                    <label for="masculino">Masculino</label>
+                    <input type="radio" formControlName="sexo" id="femenino" value="FEMENINO">
+                    <label for="femenino">Femenino</label>
+                </div>
+            </div>
         </ng-template>
     </app-stepper>
-    @if (isBrowser) {
-    <full-calendar [options]="calendarOptions"></full-calendar>
-    }
+    <app-calendar [citas]="citas"></app-calendar>
 </div>

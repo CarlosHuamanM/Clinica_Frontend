@@ -11,5 +11,6 @@ export interface Dentista {
     tipoDocumento: TipoDocumento;
     numeroIdentidad: string;
     sexo: string;
+    telefono: string;
     fechaNacimiento: string;
 }

@@ -33,6 +33,7 @@
             </ul>
             @if (userRole) {
                 <app-user-card [userNames]="nombresUsuario" [rol]="userRole" [image]="imagenPerfil"></app-user-card>
+                <a (click)="cerrarSesion()" class="btn btn-login">Cerrar sesión</a>
             }@else {
                 <a href="iniciosesion" class="btn btn-login">Iniciar sesión</a>
             }
