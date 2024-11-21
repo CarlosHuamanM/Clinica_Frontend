@@ -1,0 +1,50 @@
+.content-container {
+    flex-grow: 1;
+    margin: 20px 30px;
+    padding: 20px;
+    max-width: none;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .content-container h4 {
+    color: #022859;
+  }
+  
+  .btn-blue {
+    background-color: #022859;
+    color: #ffffff;
+    border: none;
+  }
+  
+  .btn-blue:hover {
+    background-color: #469beb;
+  }
+  
+  .pagination .page-item .page-link {
+    color: #00485b;
+    background-color: #ffffff;
+    border: 1px solid #d4d4d4;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin: 0 4px;
+    transition: all 0.3s ease;
+  }
+  
+  .pagination .page-item .page-link:hover {
+    background-color: #e9f6f7;
+    border-color: #00485b;
+  }
+  
+  .pagination .page-item .page-link.active {
+    background-color: #022859;
+    color: #ffffff;
+    border-color: #022859;
+    font-weight: bold;
+  }
+  
+  .align-tables {
+    table-layout: fixed;
+    width: 100%;
+  }
