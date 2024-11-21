@@ -10,22 +10,13 @@
             <div> <a href="#" class="nav_logo"> <img src="media/logo-removebg-preview.png" height="30" alt=""> <span
                         class="nav_logo-name">Clínica Villegas</span> </a>
                 <div class="nav_list">
-                    <a routerLink="/dashboard/reserva" class="nav_link" routerLinkActive="active">
-                        <i class='bi bi-calendar3 nav_icon'></i>
-                        <span class="nav_name">Reserva</span> 
-                    </a>
-                    <a routerLink="/dashboard/historial" class="nav_link" routerLinkActive="active">
-                        <i class='bi bi-clock-history nav_icon'></i>
-                        <span class="nav_name">Historial</span>
-                    </a>
-                    <a routerLink="/dashboard/gestion-tipo-documento" class="nav_link" routerLinkActive="active">
-                        <i class='bi bi-card-text nav_icon'></i>
-                        <span class="nav_name">Tipo de documento</span>
-                    </a>
-                    <a routerLink="/dashboard/gestion-tratamiento" class="nav_link" routerLinkActive="active">
-                        <i class='bi bi-capsule nav_icon'></i>
-                        <span class="nav_name">Tratamientos</span>
-                    </a>
+                        <a *ngFor="let item of filteredMenuItems" 
+                        [routerLink]="item.link" 
+                        class="nav_link" 
+                        routerLinkActive="active">
+                       <i [class]="item.icon + ' nav_icon'"></i>
+                       <span class="nav_name">{{ item.label }}</span>
+                     </a>
                 </div>
             </div> <a (click)="removeToken()" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span
                     class="nav_name">Cerrar sesión</span> </a>

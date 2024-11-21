@@ -13,7 +13,7 @@ export class TratamientoService {
   baseUrl = environment.apiUrl + 'tratamientos';
   constructor(private http: HttpClient) { }
 
-  getTratamientos(queryparams: any): Observable<Tratamiento[]>{
+  getTratamientos(queryparams?: any): Observable<Tratamiento[]>{
     return this.http.get<Tratamiento[]>(this.baseUrl, {params: queryparams});
   }
 

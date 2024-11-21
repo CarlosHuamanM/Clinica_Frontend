@@ -13,7 +13,7 @@ export class DentistaService {
   baseUrl = environment.apiUrl + 'dentistas';
   constructor(private http: HttpClient) { }
 
-  getDentistas(queryparams: any): Observable<Dentista[]>{
+  getDentistas(queryparams?: any): Observable<Dentista[]>{
     return this.http.get<Dentista[]>(this.baseUrl, {params: queryparams});
   }
 
