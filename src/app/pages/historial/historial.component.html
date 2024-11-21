@@ -1,43 +1,72 @@
 <div class="historial-container">
-    <div class="titulo-historial">
-        <h1>Historial de Reservas</h1>
-    </div>
-    <div class="tabla-container">
-        <table class="reservas-historial">
-            <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Dentista</th>
-                  <th>Descripción</th>
-                  <th>Estado</th>
-                  <th>Monto</th>
-                  <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-              @for (cita of citas | async; track $index) {
-                <tr>
-                  <td>{{cita.id}}</td>
-                  <td>
-                    {{cita.dentista.apellidoPaterno}} {{cita.dentista.apellidoMaterno}}, {{cita.dentista.nombres}}<br>
-                    <span class="dni-reserva">{{cita.dentista.telefono}}</span>
-                  </td>
-                  <td>
-                    Tipo: {{cita.tratamiento.tipoTratamiento.nombre}}<br>
-                    Tratamiento: {{cita.tratamiento.nombre}}<br>
-                    Fecha: {{cita.fecha}}<br>
-                    Hora: {{cita.hora}}
-                  </td>
-                  <td><span class="estado-reserva pendiente">{{cita.estado}}</span></td>
-                  <td>S/.{{cita.tratamiento.costo}} PEN</td>
-                  <td>
-                    <button class="btn cancelar">Cancelar</button>
-                    <button class="btn reprogramar">Reprogramar</button>
-                  </td>
-                </tr>
-                
-              }
-            </tbody>
-        </table>
-    </div>
+  <div class="titulo-historial">
+    <h1>Historial de Reservas</h1>
+  </div>
+  <div class="tabla-container">
+    <table class="reservas-historial">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Dentista</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Monto</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cita of citas | async; track $index) {
+        <tr>
+          <td>{{cita.id}}</td>
+          <td>
+            {{cita.dentista.apellidoPaterno}} {{cita.dentista.apellidoMaterno}}, {{cita.dentista.nombres}}<br>
+            <span class="dni-reserva">{{cita.dentista.telefono}}</span>
+          </td>
+          <td>
+            Tipo: {{cita.tratamiento.tipoTratamiento.nombre}}<br>
+            Tratamiento: {{cita.tratamiento.nombre}}<br>
+            Fecha: {{cita.fecha}}<br>
+            Hora: {{cita.hora}}
+          </td>
+          <td><span class="estado-reserva" [class]="cita.estado.toLowerCase()">{{cita.estado}}</span></td>
+          <td>S/.{{cita.tratamiento.costo}} PEN</td>
+          <td>
+            <button class="btn cancelar" (click)="trackedCita = cita; modalCancelacion.open()">Cancelar</button>
+            <button class="btn reprogramar" (click)="trackedCita = cita; modalReprogramar.open(); establecerHorarios(cita)">Reprogramar</button>
+          </td>
+        </tr>
+
+        }
+      </tbody>
+    </table>
+  </div>
 </div>
+@if (trackedCita) {
+  <app-modal #modalCancelación>
+    <div modal-header>
+      <h5 class="modal-title">¿Desea cancelar la reserva?</h5>
+    </div>
+    <div modal-body>
+      <p>La reserva para {{trackedCita.tratamiento.nombre}} con fecha {{trackedCita.fecha}} y hora {{trackedCita.hora}}
+        será cancelada.</p>
+    </div>
+    <div modal-footer>
+      <button class="btn btn-secondary" (click)="modalCancelacion.close()">Cancelar</button>
+      <button class="btn btn-primary" (click)="cancelarReserva(trackedCita.id)">Aceptar</button>
+    </div>
+  </app-modal>
+}
+<app-modal #modalReprogramar>
+  <div modal-header>
+    <h5 class="modal-title">¿Desea reprogramar la reserva?</h5>
+  </div>
+  <div modal-body>
+    <app-datepicker [disabledDates]="disabledDates" [minDate]="minDate" [maxDate]="maxDate" (dateSelected)="handleDateSelected($event)"></app-datepicker>
+    <form>
+    </form>
+  </div>
+  <div modal-footer>
+    <button class="btn btn-secondary" (click)="modalReprogramar.close()">Cancelar</button>
+    <button class="btn btn-primary" (click)="reprogramarReserva(trackedCita.id)">Aceptar</button>
+  </div>
+</app-modal>

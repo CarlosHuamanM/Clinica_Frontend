@@ -60,8 +60,25 @@ export class DatepickerComponent implements OnInit {
   }
 
   isDateDisabled(date: Date): boolean {
-    return this.disabledDates.some(d => d.toDateString() === date.toDateString() || this.minDate && date < this.minDate || this.maxDate && date > this.maxDate);
+    const normalizeDate = (d: Date): string => 
+      new Date(d.getFullYear(), d.getMonth(), d.getDate()).toDateString();
+  
+    const normalizedDate = normalizeDate(date);
+  
+    const isInDisabledDates = this.disabledDates.some(d => normalizeDate(d) === normalizedDate);
+  
+    const isBeforeMinDate = this.minDate 
+      ? date < new Date(this.minDate.setHours(0, 0, 0, 0)) 
+      : false;
+  
+    const isAfterMaxDate = this.maxDate 
+      ? date > new Date(this.maxDate.setHours(23, 59, 59, 999)) 
+      : false;
+  
+    return isInDisabledDates || isBeforeMinDate || isAfterMaxDate;
   }
+  
+  
 
   isSelected(date: Date): boolean {
     return this.selectedDate?.toDateString() === date.toDateString();

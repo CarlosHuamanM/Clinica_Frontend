@@ -11,7 +11,7 @@ export class TipoDocumentoService {
   apiUrl = environment.apiUrl + 'tipo-documento';
   constructor(private http: HttpClient) { }
 
-  getTiposDocumento(): Observable<TipoDocumento[]> {
-    return this.http.get<TipoDocumento[]>(this.apiUrl);
+  getTiposDocumento(data: any): Observable<TipoDocumento[]> {
+    return this.http.get<TipoDocumento[]>(this.apiUrl, { params: data });
   }
 }

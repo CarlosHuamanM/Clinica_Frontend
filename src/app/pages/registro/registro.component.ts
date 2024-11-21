@@ -7,6 +7,7 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { ModalComponent } from '../../core/components/modal/modal.component';
+import { ageValidator } from '../../core/validators/age.validator';
 @Component({
   selector: 'app-registro',
   standalone: true,
@@ -39,7 +40,7 @@ export class RegistroComponent implements OnInit {
     nombres: new FormControl('', Validators.required),
     apellidoPaterno: new FormControl('', Validators.required),
     apellidoMaterno: new FormControl('', Validators.required),
-    fechanacimiento: new FormControl('', [Validators.required, this.edadMayorDe18Validator()]),
+    fechanacimiento: new FormControl('', [Validators.required, ageValidator(18)]),
     telefono: new FormControl('', [
       Validators.required,
       Validators.minLength(9),
@@ -57,7 +58,7 @@ export class RegistroComponent implements OnInit {
     this.registerForm.get('tipodocumento')?.valueChanges.subscribe(() => {
       this.onTipoDocumentoChange();
     });
-    this.tiposDocumento = this.tipoDocumentoService.getTiposDocumento();
+    this.tiposDocumento = this.tipoDocumentoService.getTiposDocumento({});
   }
 
 
@@ -65,21 +66,6 @@ export class RegistroComponent implements OnInit {
     const password = this.registerForm?.get('contrasena')?.value;
     const confirmPassword = control.value;
     return password === confirmPassword ? null : { mismatch: true };
-  }
-
-
-  edadMayorDe18Validator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const fechaNacimiento = new Date(control.value);
-      const fechaHoy = new Date();
-      if (!control.value) {return null;}
-      let edad = fechaHoy.getFullYear() - fechaNacimiento.getFullYear();
-      const mes = fechaHoy.getMonth() - fechaNacimiento.getMonth();
-      if (mes < 0 || (mes === 0 && fechaHoy.getDate() < fechaNacimiento.getDate())) {
-        edad--;
-      }
-      return edad >= 18 ? null : { edadInvalida: true };
-    };
   }
 
   onTipoDocumentoChange() {

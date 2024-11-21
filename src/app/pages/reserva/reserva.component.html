@@ -46,6 +46,8 @@
                 <small class="form-text text-danger"
                     [hidden]="reservaForm.get('horario')?.get('hora')?.valid || !reservaForm.get('horario')?.get('hora')?.touched">El
                     horario de atención es de {{horarioSelected?.horaComienzo}} a {{horarioSelected?.horaFin}}</small>
+                <small class="form-text text-danger mt-1"
+                    [hidden]="!reservaForm.get('horario')?.get('hora')?.hasError('citaInvalid')">La cita no esta dentro del rango</small>
             </div>
         </ng-template>
 
@@ -91,8 +93,8 @@
                 <input type="date" class="form-control" id="fecha-nacimiento-label" formControlName="fechaNacimiento"
                     [class]="{'is-invalid': reservaForm.get('paciente')?.get('fechaNacimiento')?.invalid && reservaForm.get('paciente')?.get('fechaNacimiento')?.touched}">
                 <small class="form-text text-danger"
-                    [hidden]="reservaForm.get('paciente')?.get('fechaNacimiento')?.valid || !reservaForm.get('paciente')?.get('fechaNacimiento')?.touched">La
-                    fecha de nacimiento es obligatoria.</small>
+                    [hidden]="reservaForm.get('paciente')?.get('fechaNacimiento')?.valid || !reservaForm.get('paciente')?.get('fechaNacimiento')?.touched">Ingrese
+                    un fecha válida</small>
 
                 <div class="gender">
                     <input type="radio" formControlName="sexo" id="masculino" value="MASCULINO" checked>
@@ -101,6 +103,7 @@
                     <label for="femenino">Femenino</label>
                 </div>
             </div>
+            <button [disabled]="reservaForm.invalid" class="btn btn-primary" (click)="guardarReserva()">Reservar</button>
         </ng-template>
     </app-stepper>
     <app-calendar [citas]="citas"></app-calendar>

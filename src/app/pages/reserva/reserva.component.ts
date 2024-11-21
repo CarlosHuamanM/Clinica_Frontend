@@ -1,7 +1,7 @@
-import { AsyncPipe, isPlatformBrowser } from '@angular/common';
-import { Component, inject, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { StepperComponent } from '../../core/components/stepper/stepper.component';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Tratamiento } from '../../core/interfaces/tratamiento';
 import { TratamientoService } from '../../core/services/tratamiento.service';
@@ -18,6 +18,9 @@ import { CitaService } from '../../core/services/cita.service';
 import { ToastrService } from 'ngx-toastr';
 import { TipoDocumentoService } from '../../core/services/tipo-documento.service';
 import { TipoDocumento } from '../../core/interfaces/tipo-documento';
+import { timeRangeValidator } from '../../core/validators/time-range.validator';
+import { ageValidator } from '../../core/validators/age.validator';
+import { citaValidator } from '../../core/validators/cita.validator';
 
 @Component({
   selector: 'app-reserva',
@@ -53,8 +56,10 @@ export class ReservaComponent implements OnInit {
   activeDaysOfWeek: number[] = [];
   selectedDate: string | null = null;
   horarioSelected: Horario | undefined;
-  minDate: Date = new Date();
-  maxDate: Date = new Date(new Date().setMonth(new Date().getMonth() + 5));
+  
+  //desde el dia de hoy
+  minDate: Date = new Date(new Date().setHours(0, 0, 0, 0));
+  maxDate: Date = new Date(new Date().setMonth(new Date().getMonth() + 5, 0));
   minTimeValue: string | undefined = '';
   maxTimeValue: string | undefined = '';
 
@@ -66,22 +71,24 @@ export class ReservaComponent implements OnInit {
     this.tiposTratamientos = this.tratamientoService.getTiposTratamientos();
     this.especialidades = this.dentistaService.getEspecialidades();
     this.dentistas = this.dentistaService.getDentistas({});
-    this.tiposDocumento = this.tipoDocumentoService.getTiposDocumento();
+    this.tiposDocumento = this.tipoDocumentoService.getTiposDocumento({});
     this.userId = this.authService.getUserId();
-    this.citaService.getCitas({ usuarioId: this.userId }).subscribe({
+    this.citaService.getCitas({
+      usuarioId: this.userId,
+      estado: 'Pendiente'
+    }).subscribe({
       next: (response) => {
         this.citas = response;
         console.log(this.citas);
       },
       error: (error) => {
         console.log('Error durante la consulta de citas:' + error.message);
-        this.toastService.error(error.message);
+        this.toastService.error('Error durante la consulta de citas: ' + error.message);
       }
     });
   }
 
-
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private changeDetectorRef: ChangeDetectorRef) {
     this.reservaForm = this.fb.group({
       tipo: this.fb.group({
         tipoTratamiento: ['', Validators.required],
@@ -100,65 +107,9 @@ export class ReservaComponent implements OnInit {
         tipoDocumento: ['', Validators.required],
         numeroIdentidad: [{ value: '', disabled: true }, Validators.required],
         sexo: ['', Validators.required],
-        fechaNacimiento: ['', Validators.required, this.edadMayorDe18Validator()]
+        fechaNacimiento: ['', [Validators.required, ageValidator(18)]]
       })
     });
-  }
-
-  edadMayorDe18Validator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const fechaNacimiento = new Date(control.value);
-      const fechaHoy = new Date();
-      if (!control.value) { return null; }
-      let edad = fechaHoy.getFullYear() - fechaNacimiento.getFullYear();
-      const mes = fechaHoy.getMonth() - fechaNacimiento.getMonth();
-      if (mes < 0 || (mes === 0 && fechaHoy.getDate() < fechaNacimiento.getDate())) {
-        edad--;
-      }
-      return edad >= 18 ? null : { edadInvalida: true };
-    };
-  }
-
-  calculateActiveDays(horarios: Horario[]): void {
-    const activeDays = new Set<number>();
-    horarios.forEach((horario) => {
-      const dayOfWeek = this.mapDayToNumber(horario.dia);
-      if (dayOfWeek !== null) {
-        activeDays.add(dayOfWeek);
-      }
-    });
-    this.activeDaysOfWeek = Array.from(activeDays);
-
-    this.calculateDisabledDates();
-  }
-
-  mapDayToNumber(day: string): number | null {
-    const daysMap: { [key: string]: number } = {
-      lunes: 1,
-      martes: 2,
-      miércoles: 3,
-      jueves: 4,
-      viernes: 5,
-      sábado: 6,
-      domingo: 0,
-    };
-    return daysMap[day.toLowerCase()] ?? null;
-  }
-
-  calculateDisabledDates(): void {
-    const today = new Date();
-    const dates: Date[] = [];
-
-    for (let i = 0; i < 180; i++) {
-      const current = new Date(today);
-      current.setDate(today.getDate() + i);
-
-      if (!this.activeDaysOfWeek.includes(current.getDay())) {
-        dates.push(current);
-      }
-    }
-
-    this.disabledDates = dates;
   }
 
   convertirDuracionAMinutos(duracionISO: string): number {
@@ -205,7 +156,8 @@ export class ReservaComponent implements OnInit {
     };
     this.horarios = this.horariosService.getHorarios(queryparams);
     this.horarios.subscribe((data) => {
-      this.calculateActiveDays(data);
+      this.activeDaysOfWeek = this.horariosService.calculateActiveDays(data);
+      this.disabledDates = this.horariosService.calculateDisabledDates();
     });
     this.reservaForm.get('horario')?.get('fecha')?.enable();
   }
@@ -230,25 +182,14 @@ export class ReservaComponent implements OnInit {
       this.minTimeValue = this.horarioSelected?.horaComienzo.substring(0, 5);
       this.maxTimeValue = this.horarioSelected?.horaFin.substring(0, 5);
       console.log(this.minTimeValue, this.maxTimeValue);
-      this.reservaForm.get('horario')?.get('hora')?.setValidators([Validators.required, this.timeRangeValidator(this.minTimeValue ?? '', this.maxTimeValue ?? '')]);
+      this.reservaForm.get('horario')?.get('hora')?.setValidators([
+        Validators.required,
+        timeRangeValidator(this.minTimeValue ?? '', this.maxTimeValue ?? ''),
+        citaValidator(this.citaService, this.reservaForm.get('horario')?.get('fecha')?.value, this.reservaForm.get('tipo')?.get('tratamientoId')?.value)
+      ]);
     });
     this.reservaForm.get('horario')?.get('hora')?.enable();
   }
-
-  timeRangeValidator(min: string, max: string) {
-    return (control: AbstractControl) => {
-      const value = control.value;
-      if (!value) {
-        return null; // Campo vacío
-      }
-
-      if (value < min || value > max) {
-        return { outOfRange: true };
-      }
-      return null; // Válido
-    };
-  }
-
   agregarValidadores(event: Event) {
     const target = event.target as HTMLSelectElement;
     const tipoDocumento = target.value;
@@ -268,6 +209,46 @@ export class ReservaComponent implements OnInit {
       default:
         break;
     }
+  }
+  
+  guardarReserva() {
+    const reservaData = {
+      fecha: this.reservaForm.get('horario')?.get('fecha')?.value,
+      hora: this.reservaForm.get('horario')?.get('hora')?.value,
+      monto: 120.50,
+      nombres: this.reservaForm.get('paciente')?.get('nombres')?.value,
+      apellidoPaterno: this.reservaForm.get('paciente')?.get('apellidoPaterno')?.value,
+      apellidoMaterno: this.reservaForm.get('paciente')?.get('apellidoMaterno')?.value,
+      tipoDocumento: this.reservaForm.get('paciente')?.get('tipoDocumento')?.value,
+      numeroIdentidad: this.reservaForm.get('paciente')?.get('numeroIdentidad')?.value,
+      sexo: this.reservaForm.get('paciente')?.get('sexo')?.value,
+      fechaNacimiento: this.reservaForm.get('paciente')?.get('fechaNacimiento')?.value,
+      dentistaId: this.reservaForm.get('tipo')?.get('dentistaId')?.value,
+      usuarioId: this.userId,
+      tratamientoId: this.reservaForm.get('tipo')?.get('tratamientoId')?.value
+    };
+  
+    this.citaService.createCita(reservaData).subscribe({
+      next: (data) => {
+        this.toastService.success(data.mensaje);
+  
+        this.citaService.getCitas({ usuarioId: this.userId }).subscribe({
+          next: (citas) => {
+            this.citas = citas;
+            this.changeDetectorRef.detectChanges();
+          },
+          error: (error) => {
+            console.error('Error al actualizar citas:', error);
+            this.toastService.error('Error al actualizar citas: ' + error.message);
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Error al guardar la reserva:', error);
+        this.toastService.error('Error al guardar la reserva: ' + error.message);
+      }
+    });
+    
   }
 }
 

@@ -67,6 +67,10 @@ h1 {
     color: #10b981;
     background-color: #d1fae5;
 }
+.estado-reserva.cancelada{
+    color: #fff;
+    background-color: #d63c39a8;
+}
 
 .btn{
     padding: 8px 12px;
