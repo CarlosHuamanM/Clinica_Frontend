@@ -51,8 +51,8 @@ export class AdministradorComponent {
     }
   
     loadData(): void {
-      this.TipoDocumentoService.getTiposDocumento().subscribe((data) => {
-        this.totalPagesTipoDocumento = Math.ceil(data.length / 3); // Divide por 3 elementos por página
+      this.TipoDocumentoService.getTiposDocumento({}).subscribe((data) => {
+        this.totalPagesTipoDocumento = Math.ceil(data.length / 3);
         this.paginatedTipoDocumentos = this.paginate(data, this.currentPageTipoDocumento, 3);
       });
   

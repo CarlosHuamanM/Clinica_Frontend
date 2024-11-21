@@ -29,6 +29,7 @@
     border-radius: 6px;
     padding: 8px 12px;
     margin: 0 4px;
+    cursor: pointer;
     transition: all 0.3s ease;
   }
   
