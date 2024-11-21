@@ -20,4 +20,16 @@ export class TratamientoService {
   getTiposTratamientos(): Observable<TipoTratamiento[]>{
     return this.http.get<TipoTratamiento[]>(environment.apiUrl + 'tipo-tratamiento');
   }
+
+  createTratamiento(data: any): Observable<any>{
+    return this.http.post<any>(this.baseUrl, data);
+  }
+
+  updateTratamiento(id: number, data: any): Observable<any>{
+    return this.http.put<any>(this.baseUrl + '/' + id, data);
+  }
+
+  deleteTratamiento(id: number): Observable<any>{
+    return this.http.delete<any>(this.baseUrl + '/' + id);
+  } 
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, viewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Tratamiento } from '../../core/interfaces/tratamiento';
 import { TratamientoService } from '../../core/services/tratamiento.service';
@@ -21,6 +21,8 @@ export class GestionTratamientoComponent implements OnInit {
   Tratamientos!: Observable<Tratamiento[]>;
 
   TratamientosService = inject(TratamientoService);
+
+
 
   ngOnInit(): void {
     this.loadData();

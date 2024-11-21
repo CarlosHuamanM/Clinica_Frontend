@@ -2,7 +2,7 @@
     <h4 class="fw-bold">Tipo de documento</h4>
     <div class="d-flex justify-content-between mb-3">
         <input type="text" class="form-control w-50" placeholder="Buscar">
-        <button class="btn btn-blue">Agregar</button>
+        <button class="btn btn-blue" (click)="modal.open()">Agregar</button>
     </div>
     <table class="table table-striped table-bordered">
         <thead>
@@ -19,8 +19,8 @@
                 <td>{{ tipoDocumento.id }}</td>
                 <td>{{ tipoDocumento.nombre }}</td>
                 <td>{{ tipoDocumento.acronimo }}</td>
-                <td><button class="btn btn-blue">Editar</button></td>
-                <td><button class="btn btn-blue">Eliminar</button></td>
+                <td><button class="btn btn-blue" (click)="openModalUdpate(tipoDocumento)">Editar</button></td>
+                <td><button class="btn btn-blue" (click)="openModalDelete(tipoDocumento)">Eliminar</button></td>
             </tr>
         </tbody>
     </table>
@@ -39,4 +39,38 @@
             </li>
         </ul>
     </nav>
+    <app-modal #modal>
+       <div modal-header>
+           <h4>{{accionFormulario}}Nuevo tipo de documento</h4>
+       </div>
+       <div modal-body>
+           <form>
+               <div class="form-group">
+                   <label for="nombre">Nombre</label>
+                   <input type="text" class="form-control" id="nombre" placeholder="Nombre">
+               </div>
+               <div class="form-group">
+                   <label for="acronimo">Acrónimo</label>
+                   <input type="text" class="form-control" id="acronimo" placeholder="Acrónimo">
+               </div>
+           </form>
+       </div>
+       <div modal-footer>
+           <button type="button" class="btn btn-blue" (click)="modal.close()">Cancelar</button>
+           <button type="button" class="btn btn-blue" (click)="registroTipoDocumento()">Guardar</button>
+       </div>
+    </app-modal>
+    <app-modal #modalEliminar>
+       <div modal-header>
+           <h4>{{accionFormulario}}Eliminar tipo de documento</h4>
+       </div>
+       <div modal-body>
+           <p>¿Está seguro de eliminar el tipo de documento?</p>
+       </div>
+       <div modal-footer>
+           <button type="button" class="btn btn-blue" (click)="modalEliminar.close()">Cancelar</button>
+           <button type="button" class="btn btn-blue" (click)="eliminarTipoDocumento()">Eliminar</button>
+       </div>
+    </app-modal>
+    
 </section>
