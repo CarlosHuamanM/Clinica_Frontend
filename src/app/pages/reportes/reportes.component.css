@@ -1,0 +1,15 @@
+.bg-info {
+    background-color: #1bc5bd !important;
+}
+
+.bg-primary {
+    background-color: #3699ff !important;
+}
+
+.bg-dark {
+    background-color: #1e1e2f !important;
+}
+
+.text-warning {
+    color: #ffc107 !important;
+}

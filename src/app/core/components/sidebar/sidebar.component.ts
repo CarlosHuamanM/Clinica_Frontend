@@ -31,7 +31,8 @@ export class SidebarComponent {
     this.menuItems = [
       { label: 'Reserva', link: '/dashboard/reserva', icon: 'bi bi-calendar3', roles: ["PACIENTE", 'DENTISTA' , "ADMINISTRADOR"] },
       { label: 'Historial', link: '/dashboard/historial', icon: 'bi bi-clock-history', roles: ["PACIENTE", "DENTISTA"] },
-      { label: 'Gestión Usuarios', link: '/dashboard/administrador', icon: 'bi bi-database-fill', roles: ["ADMINISTRADOR","DENTISTA"] }
+      { label: 'Administrador', link: '/dashboard/administrador', icon: 'bi bi-database-fill', roles: ["ADMINISTRADOR","DENTISTA"] },
+      { label: 'Reportes', link: '/dashboard/reportes', icon: 'bi bi-file-earmark-bar-graph-fill', roles: ["DENTISTA", "ADMINISTRADOR"] }
     ];
     this.filteredMenuItems = this.menuItems.filter(menu => menu.roles.includes(this.userRole));
 

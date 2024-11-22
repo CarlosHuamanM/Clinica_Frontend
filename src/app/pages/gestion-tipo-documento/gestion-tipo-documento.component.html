@@ -1,8 +1,10 @@
 <section class="mb-5">
     <h4 class="fw-bold">Tipo de documento</h4>
     <div class="d-flex justify-content-between mb-3">
-        <input type="text" class="form-control w-50" placeholder="Buscar">
-        <button class="btn btn-blue" (click)="modal.open()">Agregar</button>
+        <form [formGroup]="busquedaForm" class="w-50">
+            <input type="text" class="form-control" formControlName="busqueda" (change)="onChangeTipoDocumento($event)" placeholder="Buscar">
+        </form>
+        <button class="btn btn-blue" (click)="openModalToCreate()">Agregar</button>
     </div>
     <table class="table table-striped table-bordered">
         <thead>
@@ -44,32 +46,34 @@
            <h4>{{accionFormulario}}Nuevo tipo de documento</h4>
        </div>
        <div modal-body>
-           <form>
+           <form [formGroup]="tipoDocumentoForm">
                <div class="form-group">
-                   <label for="nombre">Nombre</label>
-                   <input type="text" class="form-control" id="nombre" placeholder="Nombre">
+                   <label for="nombre" class="form-label">Nombre</label>
+                   <input type="text" class="form-control" formControlName="nombre" id="nombre" placeholder="Nombre">
                </div>
                <div class="form-group">
-                   <label for="acronimo">Acrónimo</label>
-                   <input type="text" class="form-control" id="acronimo" placeholder="Acrónimo">
+                   <label for="acronimo" class="form-label">Acrónimo</label>
+                   <input type="text" class="form-control" formControlName="acronimo" id="acronimo" placeholder="Acrónimo">
                </div>
            </form>
        </div>
        <div modal-footer>
            <button type="button" class="btn btn-blue" (click)="modal.close()">Cancelar</button>
-           <button type="button" class="btn btn-blue" (click)="registroTipoDocumento()">Guardar</button>
+           <button type="button" class="btn btn-blue ms-2" (click)="registroTipoDocumento()">Guardar</button>
        </div>
     </app-modal>
-    <app-modal #modalEliminar>
+    <app-modal #modalDelete>
        <div modal-header>
            <h4>{{accionFormulario}}Eliminar tipo de documento</h4>
        </div>
        <div modal-body>
-           <p>¿Está seguro de eliminar el tipo de documento?</p>
+        @if (trackedTipoDocumento) {
+           <p>¿Está seguro de eliminar el tipo de documento "{{trackedTipoDocumento.nombre}}"?</p>
+        }
        </div>
        <div modal-footer>
-           <button type="button" class="btn btn-blue" (click)="modalEliminar.close()">Cancelar</button>
-           <button type="button" class="btn btn-blue" (click)="eliminarTipoDocumento()">Eliminar</button>
+           <button type="button" class="btn btn-blue" (click)="modalDelete.close()">Cancelar</button>
+           <button type="button" class="btn btn-blue ms-2" (click)="eliminarTipoDocumento()">Eliminar</button>
        </div>
     </app-modal>
     

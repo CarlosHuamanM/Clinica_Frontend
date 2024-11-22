@@ -7,21 +7,20 @@ export function citaValidator(citaService: CitaService, fecha: string, tratamien
   return (control: AbstractControl) => {
     const value = control.value;
     if (!value) {
-      return of(null); // Si no hay valor, no hay error.
+      return of(null);
     }
 
     console.log(fecha, value, tratamientoId);
 
-    // Devolvemos el observable transformado.
     return citaService.getValidationByDateAndHour({
       fecha: fecha,
       hora: value,
       tratamientoId: Number(tratamientoId),
       dentistaId: Number(dentistaId),
     }).pipe(
-      debounceTime(300), // Opcional: evita demasiadas llamadas rápidas.
-      map((isValid) => (isValid ? null : { citaInvalid: true })), // Devuelve `null` o `{ citaInvalid: true }`.
-      catchError(() => of(null)) // En caso de error, no marcará como inválido.
+      debounceTime(300),
+      map((isValid) => (isValid ? null : { citaInvalid: true })),
+      catchError(() => of(null))
     );
   };
 }

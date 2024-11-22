@@ -9,6 +9,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { roleGuard } from './core/guards/role.guard';
 import { HistorialComponent } from './pages/historial/historial.component';
 import { AdministradorComponent } from './pages/administrador/administrador.component';
+import { ReportesComponent } from './pages/reportes/reportes.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'inicio', pathMatch: 'full' },
@@ -22,5 +23,6 @@ export const routes: Routes = [
         {path: 'reserva' ,component: ReservaComponent, canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}},
         {path: 'historial' ,component: HistorialComponent, canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}},
         {path: 'administrador' ,component: AdministradorComponent, canActivate: [roleGuard], data: {roles: ['DENTISTA', 'ADMINISTRADOR']}},
+        {path: 'reportes' ,component: ReportesComponent, canActivate: [roleGuard], data: {roles: ['DENTISTA', 'ADMINISTRADOR']}},
     ], canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}}
 ];
