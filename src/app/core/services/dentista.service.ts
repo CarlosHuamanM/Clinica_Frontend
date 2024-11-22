@@ -20,4 +20,14 @@ export class DentistaService {
   getEspecialidades(): Observable<String[]>{
     return this.http.get<String[]>(this.baseUrl + '/especialidades');
   }
+
+  createDentista(data:any): Observable<any>{
+    return this.http.post<any>(this.baseUrl + '/', data);
+  }
+  updateDentista(id: number, data: any): Observable<any>{
+    return this.http.put<any>(this.baseUrl + '/' + id, data);
+  }
+  deleteDentista(id: number): Observable<any>{
+    return this.http.delete<any>(this.baseUrl + '/' + id);
+  }
 }

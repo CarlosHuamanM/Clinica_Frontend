@@ -5,4 +5,5 @@ export interface TipoDocumento {
     estado: boolean;
     fechaCreacion: string;
     fechaModificacion: string;
+    
 }
