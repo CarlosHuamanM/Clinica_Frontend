@@ -56,7 +56,7 @@ export class ReservaComponent implements OnInit {
   activeDaysOfWeek: number[] = [];
   selectedDate: string | null = null;
   horarioSelected: Horario | undefined;
-  
+
   //desde el dia de hoy
   minDate: Date = new Date(new Date().setHours(0, 0, 0, 0));
   maxDate: Date = new Date(new Date().setMonth(new Date().getMonth() + 5, 0));
@@ -184,11 +184,19 @@ export class ReservaComponent implements OnInit {
       console.log(this.minTimeValue, this.maxTimeValue);
       this.reservaForm.get('horario')?.get('hora')?.setValidators([
         Validators.required,
-        timeRangeValidator(this.minTimeValue ?? '', this.maxTimeValue ?? ''),
-        citaValidator(this.citaService, this.reservaForm.get('horario')?.get('fecha')?.value, this.reservaForm.get('tipo')?.get('tratamientoId')?.value)
+        timeRangeValidator(this.minTimeValue ?? '', this.maxTimeValue ?? '')
       ]);
+      this.reservaForm.get('horario')?.get('hora')?.setAsyncValidators(
+        citaValidator(
+          this.citaService,
+          this.reservaForm.get('horario')?.get('fecha')?.value,
+          this.reservaForm.get('tipo')?.get('tratamientoId')?.value,
+          this.reservaForm.get('tipo')?.get('dentistaId')?.value
+        )
+      );
     });
     this.reservaForm.get('horario')?.get('hora')?.enable();
+
   }
   agregarValidadores(event: Event) {
     const target = event.target as HTMLSelectElement;
@@ -210,7 +218,7 @@ export class ReservaComponent implements OnInit {
         break;
     }
   }
-  
+
   guardarReserva() {
     const reservaData = {
       fecha: this.reservaForm.get('horario')?.get('fecha')?.value,
@@ -227,11 +235,11 @@ export class ReservaComponent implements OnInit {
       usuarioId: this.userId,
       tratamientoId: this.reservaForm.get('tipo')?.get('tratamientoId')?.value
     };
-  
+
     this.citaService.createCita(reservaData).subscribe({
       next: (data) => {
         this.toastService.success(data.mensaje);
-  
+
         this.citaService.getCitas({ usuarioId: this.userId }).subscribe({
           next: (citas) => {
             this.citas = citas;
@@ -248,7 +256,10 @@ export class ReservaComponent implements OnInit {
         this.toastService.error('Error al guardar la reserva: ' + error.message);
       }
     });
-    
+
+  }
+  mostrar() {
+    console.log(this.reservaForm);
   }
 }
 

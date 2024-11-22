@@ -44,10 +44,11 @@
                     [max]="maxTimeValue"
                     [class]="{'is-invalid': reservaForm.get('horario')?.get('hora')?.invalid && reservaForm.get('horario')?.get('hora')?.touched}">
                 <small class="form-text text-danger"
-                    [hidden]="reservaForm.get('horario')?.get('hora')?.valid || !reservaForm.get('horario')?.get('hora')?.touched">El
+                    [hidden]="!reservaForm.get('horario')?.get('hora')?.hasError('outOfRange') || !reservaForm.get('horario')?.get('hora')?.touched">El
                     horario de atención es de {{horarioSelected?.horaComienzo}} a {{horarioSelected?.horaFin}}</small>
                 <small class="form-text text-danger mt-1"
-                    [hidden]="!reservaForm.get('horario')?.get('hora')?.hasError('citaInvalid')">La cita no esta dentro del rango</small>
+                    [hidden]="!reservaForm.get('horario')?.get('hora')?.hasError('citaInvalid')">Ya hay un cita reservada en este horario</small>
+                <button (click)="mostrar()">mostrat</button>
             </div>
         </ng-template>
 

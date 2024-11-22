@@ -1,8 +1,10 @@
 <section class="mb-5">
     <h4 class="fw-bold">Tratamientos</h4>
     <div class="d-flex justify-content-between mb-3">
-        <input type="text" class="form-control w-50" placeholder="Buscar">
-        <button class="btn btn-blue">Agregar</button>
+        <form [formGroup]="formBusqueda" class="w-50">
+            <input type="text" class="form-control" formControlName="busqueda" (change)="onChangeBusqueda($event)" placeholder="Buscar">
+        </form>
+        <button class="btn btn-blue" (click)="openModalToCreate()">Agregar</button>
     </div>
 
     <table class="table table-striped table-bordered">
@@ -20,8 +22,8 @@
                 <td>{{ tratamiento.id }}</td>
                 <td>{{ tratamiento.nombre }}</td>
                 <td>S/ {{ tratamiento.costo }}</td>
-                <td><button class="btn btn-blue">Editar</button></td>
-                <td><button class="btn btn-blue">Eliminar</button></td>
+                <td><button class="btn btn-blue" (click)="openModalToUpdate(tratamiento)">Editar</button></td>
+                <td><button class="btn btn-blue" (click)="openModalToDelete(tratamiento)">Eliminar</button></td>
             </tr>
         </tbody>
     </table>
@@ -42,3 +44,73 @@
         </ul>
     </nav>
 </section>
+<app-modal #modal>
+    <div modal-header>
+        <h5>{{acccionFormulario}} tratamiento</h5>
+    </div>
+    <div modal-body>
+        <form [formGroup]="formTratamiento">
+            <label class="form-label" for="nombre">Nombre:</label>
+            <input class="form-control" type="text" id="nombre" name="nombre" formControlName="nombre"
+                [class]="{'is-invalid': formTratamiento.get('nombre')?.invalid && formTratamiento.get('nombre')?.touched}">
+            <small class="form-text text-danger"
+                [hidden]="formTratamiento.get('nombre')?.valid || !formTratamiento.get('nombre')?.touched">El
+                nombre es obligatorio.</small>
+            <label class="form-label" for="descripcion">Descripción:</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" formControlName="descripcion"
+                [class]="{'is-invalid': formTratamiento.get('descripcion')?.invalid && formTratamiento.get('descripcion')?.touched}"></textarea>
+            <small class="form-text text-danger"
+                [hidden]="formTratamiento.get('descripcion')?.valid || !formTratamiento.get('descripcion')?.touched">La
+                descripción es obligatoria.</small>
+            <label class="form-label" for="costo">Costo:</label>
+            <input class="form-control" type="number" id="costo" name="costo" min="0" formControlName="costo"
+                [class]="{'is-invalid': formTratamiento.get('costo')?.invalid && formTratamiento.get('costo')?.touched}">
+            <small class="form-text text-danger"
+                [hidden]="formTratamiento.get('costo')?.valid || !formTratamiento.get('costo')?.touched">El
+                costo es obligatorio.</small>
+            <label class="form-label" for="duracion">Duración:</label>
+            <select formControlName="duracion" class="form-select" id="duracion" name="duracion"
+                [class]="{'is-invalid': formTratamiento.get('duracion')?.invalid && formTratamiento.get('duracion')?.touched}">
+                <option value="20">20 mins</option>
+                <option value="30">30 mins</option>
+                <option value="45">45 mins</option>
+                <option value="60">1 hora</option>
+                <option value="90">1h 30mins</option>
+                <option value="120">2h</option>
+            </select>
+            <label class="form-label" for="tipo">Tipo:</label>
+            <select class="form-select" id="tipo" name="tipo" formControlName="tipoTratamientoId">
+                @for (tipo of tiposTratamiento | async; track $index) {
+                <option value="{{tipo.id}}">{{tipo.nombre}}</option>
+                }
+            </select>
+            <label for="imagenURL" class="form-label">Imagen:</label>
+            <input type="text" class="form-control" id="imagenURL" name="imagenURL" formControlName="imagenURL">
+        </form>
+    </div>
+    <div modal-footer>
+        <button type="button" class="btn btn-secondary" (click)="modal.close()">Cerrar</button>
+        @if (acccionFormulario === 'Crear') {
+        <button type="button" class="btn btn-primary ms-2" [disabled]="formTratamiento.invalid"
+            (click)="guardarTratamiento()">Crear</button>
+        }
+        @if (acccionFormulario === 'Editar') {
+        <button type="button" class="btn btn-primary ms-2" [disabled]="formTratamiento.invalid"
+            (click)="actualizarTratamiento()">Editar</button>
+        }
+    </div>
+</app-modal>
+<app-modal #modalDelete>
+    <div modal-header>
+        <h5>Eliminar tratamiento</h5>
+    </div>
+    <div modal-body>
+        @if (trackedTratamiento) {
+        <p>¿Estás seguro de eliminar este tratamiento <span class="fw-bold">"{{trackedTratamiento.nombre}}"?</span></p>
+        }
+    </div>
+    <div modal-footer>
+        <button type="button" class="btn btn-secondary" (click)="modalDelete.close()">Cancelar</button>
+        <button type="button" class="btn btn-primary ms-2" (click)="eliminarTratamiento()">Eliminar</button>
+    </div>
+</app-modal>

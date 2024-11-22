@@ -32,7 +32,9 @@
           <td>S/.{{cita.tratamiento.costo}} PEN</td>
           <td>
             <button class="btn cancelar" (click)="trackedCita = cita; modalCancelacion.open()">Cancelar</button>
-            <button class="btn reprogramar" (click)="trackedCita = cita; modalReprogramar.open(); establecerHorarios(cita)">Reprogramar</button>
+            @if (cita.estado === 'Pendiente') {
+              <button class="btn reprogramar" (click)="trackedCita = cita; modalReprogramar.open(); establecerHorarios(cita)">Reprogramar</button>
+            }
           </td>
         </tr>
 
