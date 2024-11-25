@@ -48,7 +48,6 @@
                     horario de atención es de {{horarioSelected?.horaComienzo}} a {{horarioSelected?.horaFin}}</small>
                 <small class="form-text text-danger mt-1"
                     [hidden]="!reservaForm.get('horario')?.get('hora')?.hasError('citaInvalid')">Ya hay un cita reservada en este horario</small>
-                <button (click)="mostrar()">mostrat</button>
             </div>
         </ng-template>
 
