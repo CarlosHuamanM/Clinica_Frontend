@@ -19,7 +19,6 @@ import { ToastrService } from 'ngx-toastr';
 import { TipoDocumentoService } from '../../core/services/tipo-documento.service';
 import { TipoDocumento } from '../../core/interfaces/tipo-documento';
 import { timeRangeValidator } from '../../core/validators/time-range.validator';
-import { ageValidator } from '../../core/validators/age.validator';
 import { citaValidator } from '../../core/validators/cita.validator';
 
 @Component({
@@ -107,7 +106,7 @@ export class ReservaComponent implements OnInit {
         tipoDocumento: ['', Validators.required],
         numeroIdentidad: [{ value: '', disabled: true }, Validators.required],
         sexo: ['', Validators.required],
-        fechaNacimiento: ['', [Validators.required, ageValidator(18)]]
+        fechaNacimiento: ['', [Validators.required]]
       })
     });
   }
@@ -257,9 +256,6 @@ export class ReservaComponent implements OnInit {
       }
     });
 
-  }
-  mostrar() {
-    console.log(this.reservaForm);
   }
 }
 

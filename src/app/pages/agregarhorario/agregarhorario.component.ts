@@ -10,4 +10,8 @@ import { CalendarComponent } from "../../core/components/calendar/calendar.compo
 })
 export class AgregarhorarioComponent {
 
+  
+  constructor(){
+    
+  }
 }

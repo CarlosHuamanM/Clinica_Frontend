@@ -22,7 +22,7 @@ export class DentistaService {
   }
 
   createDentista(data:any): Observable<any>{
-    return this.http.post<any>(this.baseUrl + '/', data);
+    return this.http.post<any>(this.baseUrl, data);
   }
   updateDentista(id: number, data: any): Observable<any>{
     return this.http.put<any>(this.baseUrl + '/' + id, data);

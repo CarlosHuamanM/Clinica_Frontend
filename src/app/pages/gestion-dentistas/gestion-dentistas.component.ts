@@ -1,13 +1,18 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { Dentista } from '../../core/interfaces/dentista';
 import { Observable } from 'rxjs';
 import { DentistaService } from '../../core/services/dentista.service';
 import { CommonModule } from '@angular/common';
+import { ModalComponent } from '../../core/components/modal/modal.component';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { UsuarioService } from '../../core/services/usuario.service';
+import { Usuario } from '../../core/interfaces/usuario';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-gestion-dentistas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ModalComponent, ReactiveFormsModule],
   templateUrl: './gestion-dentistas.component.html',
   styleUrl: './gestion-dentistas.component.css'
 })
@@ -17,16 +22,52 @@ export class GestionDentistasComponent implements OnInit {
   totalPagesDentista: number = 1;
   paginatedDentistas: Dentista[] = [];
 
+  // Paginación de usuarios
+  currentPageUsuario: number = 1;
+  totalPagesUsuario: number = 1;
+  paginatedUsuarios: Usuario[] = [];
+
+
   Dentistas!: Observable<Dentista[]>;
   DentistasService = inject(DentistaService);
+  usuarioService = inject(UsuarioService);
+  toastService = inject(ToastrService);
+  usuarios!: Observable<Usuario[]>;
+
+  usuarioTracked!: Usuario;
+
+  @ViewChild('modalCreate') modalCreate!: ModalComponent;
+
+  dentistaForm = new FormGroup({
+    nColegiatura: new FormControl('', [Validators.minLength(5), Validators.maxLength(5)]),
+    especialidad: new FormControl(''),
+    usuarioId: new FormControl(''),
+  })
+
+  usuarioBusqueda = new FormGroup({
+    nombre: new FormControl(''),
+  });
+
+
 
   ngOnInit(): void {
     this.loadData();
+    this.loadUsuarios();
   }
   loadData(): void {
     this.DentistasService.getDentistas().subscribe((data) => {
       this.totalPagesDentista = Math.ceil(data.length / 3);
       this.paginatedDentistas = this.paginate(data, this.currentPageDentista, 3);
+    });
+  }
+  loadUsuarios(): void {
+    this.usuarioService.getUsuarios(
+      {
+        rol: 'PACIENTE'
+      }
+    ).subscribe((data) => {
+      this.totalPagesUsuario = Math.ceil(data.length / 3);
+      this.paginatedUsuarios = this.paginate(data, this.currentPageUsuario, 3);
     });
   }
 
@@ -42,5 +83,38 @@ export class GestionDentistasComponent implements OnInit {
     if (page < 1 || page > this.totalPagesDentista) return;
     this.currentPageDentista = page;
     this.loadData(); // Recargar los datos para la nueva página
+  }
+  onPageChangeUsuario(page: number): void {
+    if (page < 1 || page > this.totalPagesUsuario) return;
+    this.currentPageUsuario = page;
+    this.loadUsuarios(); // Recargar los datos para la nueva página
+  }
+  setUsuarioTracked(usuario: Usuario){
+    this.usuarioTracked = usuario;
+    this.dentistaForm.get('usuarioId')?.setValue(usuario.id.toString());
+    console.log(this.dentistaForm.get('usuarioId')?.value);
+  }
+  openModalToCreate(){
+    this.modalCreate.open();
+  }
+  
+  registrarDentista(){
+    const data = {
+      ncolegiatura: this.dentistaForm.get('nColegiatura')?.value??'',
+      especializacion: this.dentistaForm.get('especialidad')?.value??'',
+      usuarioId: this.dentistaForm.get('usuarioId')?.value??'',
+    };
+    this.DentistasService.createDentista(data).subscribe({
+      next: (response) => {
+        this.toastService.success(response.mensaje);
+        this.loadUsuarios();
+        this.loadData();
+        this.modalCreate.close();
+      },
+      error: (error) => {
+        console.log('Error durante el registro:' + error.message);
+        this.toastService.error('Error durante el registro: ' + error.message);
+      }
+    });
   }
 }
