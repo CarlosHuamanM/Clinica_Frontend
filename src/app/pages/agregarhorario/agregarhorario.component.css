@@ -69,7 +69,15 @@
 .btn:hover {
     background-color: #00337c;
 }
-app-calendar{
-    width: 60%;
-    height: 70%;
+
+.tabla-container-horarios{
+    max-width: 1300px;
+    width: 70%;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

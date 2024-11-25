@@ -70,6 +70,17 @@ export class AuthService {
     return null;
   }
 
+  getDentistaId(): any{
+    if (typeof window !== 'undefined' && localStorage.getItem('token')){
+      const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
+      if (token) {
+        const decodedToken: any = jwtDecode(token);
+        return decodedToken.dentistaId;
+      }
+    }
+    return null;
+  }
+
   getNames(): any {
     if (typeof window !== 'undefined' && localStorage.getItem('token')){
       const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
