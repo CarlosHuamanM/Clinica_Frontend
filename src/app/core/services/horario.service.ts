@@ -20,6 +20,13 @@ export class HorarioService {
     return this.http.get<Horario[]>(this.baseUrl, { params: queryparams });
   }
 
+  createHorario(data: any): Observable<any>{
+    return this.http.post<any>(this.baseUrl, data);
+  }
+  deleteHorario(id: number): Observable<any>{
+    return this.http.delete<any>(`${this.baseUrl}/${id}`);
+  }
+
   mapDayToNumber(day: string): number | null {
     const daysMap: { [key: string]: number } = {
       lunes: 1,

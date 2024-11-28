@@ -11,6 +11,7 @@ import { HistorialComponent } from './pages/historial/historial.component';
 import { AdministradorComponent } from './pages/administrador/administrador.component';
 import { ReportesComponent } from './pages/reportes/reportes.component';
 import { AgregarhorarioComponent } from './pages/agregarhorario/agregarhorario.component';
+import { GestionCitasComponent } from './pages/gestion-citas/gestion-citas.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'inicio', pathMatch: 'full' },
@@ -27,5 +28,6 @@ export const routes: Routes = [
         {path: 'administrador' ,component: AdministradorComponent, canActivate: [roleGuard], data: {roles: ['DENTISTA', 'ADMINISTRADOR']}},
         {path: 'reportes' ,component: ReportesComponent, canActivate: [roleGuard], data: {roles: ['DENTISTA', 'ADMINISTRADOR']}},
         {path: 'agregarhorario' ,component: AgregarhorarioComponent, canActivate: [roleGuard], data: {roles: ['DENTISTA', 'ADMINISTRADOR']}},
+        {path: 'gestioncitas' ,component: GestionCitasComponent, canActivate: [roleGuard], data: {roles: ['DENTISTA', 'ADMINISTRADOR']}},
     ], canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}}
 ];

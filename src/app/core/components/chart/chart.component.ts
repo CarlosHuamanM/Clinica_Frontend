@@ -1,6 +1,9 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { Chart, registerables } from 'chart.js';
+import { AfterViewInit, Component, ElementRef, Inject, Input, OnChanges, OnInit, PLATFORM_ID, SimpleChanges, ViewChild } from '@angular/core';
+import { Chart, ChartConfiguration, registerables } from 'chart.js';
+import { CitaService } from '../../services/cita.service';
+import { ReporteService } from '../../services/reporte.service';
+import { CitaPorMesDTO } from '../../interfaces/cita-por-mes-dto';
 
 Chart.register(...registerables);
 
@@ -11,44 +14,50 @@ Chart.register(...registerables);
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.css'
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements OnInit, OnChanges {
 
-  public config: any = {
-    type: 'bar',
-    data: {
-      labels: ['A', 'B', 'C'],
-      datasets: [
-        {
-          label: 'Dataset 1',
-          data: [1, 2, 3],
-          borderColor: '#36A2EB',
-          backgroundColor: '#9BD0F5',
-        },
-        {
-          label: 'Dataset 2',
-          data: [2, 3, 4],
-          borderColor: '#FF6384',
-          backgroundColor: '#FFB1C1',
-        }
-      ]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    },
-  };
-  chart: any;
-  isBrowser!:boolean
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    this.isBrowser = isPlatformBrowser(this.platformId);
-  }
+  @Input({ required: true }) public type!: string;
+  @Input({ required: true }) public data!: any;
+  @Input() public options: any;
+
+  chart: Chart | null = null;
+
+  @ViewChild('mychart', { static: true }) mychart!: ElementRef<HTMLCanvasElement>;
+  constructor() {}
+
   ngOnInit(): void {
-      if (this.isBrowser) {
-        this.chart = new Chart('MyChart', this.config);
-      }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] || changes['type'] || changes['options']) {
+      this.updateChart();
+    }
+  }
+
+  private updateChart(): void {
+    if (!this.mychart || !this.mychart.nativeElement) {
+      return;
+    }
+    if (this.chart) {
+      this.chart.destroy();
+    }
+
+    const config: ChartConfiguration = {
+      type: this.type as any,
+      data: this.data,
+      options: this.options,
+    };
+
+    const canvasElement = this.mychart.nativeElement;
+    if (canvasElement) {
+      this.chart = new Chart(canvasElement, config);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.chart) {
+      this.chart.destroy();
+    }
   }
 
 }

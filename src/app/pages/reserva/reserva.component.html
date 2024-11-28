@@ -1,5 +1,5 @@
 <div class="container-dashboard">
-    <app-stepper [formGroup]="reservaForm" [formTracked]="reservaForm">
+    <app-stepper #stepper [formGroup]="reservaForm" [formTracked]="reservaForm">
         <ng-template #step>
             <div formGroupName="tipo">
                 <label for="tipo-tratamiento-label" class="form-label">Selecciona un tipo de tratamiento:</label>
@@ -103,7 +103,7 @@
                     <label for="femenino">Femenino</label>
                 </div>
             </div>
-            <button [disabled]="reservaForm.invalid" class="btn btn-primary" (click)="guardarReserva()">Reservar</button>
+            <button [disabled]="reservaForm.invalid" [hidden]="ocultarBotonReserva" class="btn btn-primary" (click)="guardarReserva()">Reservar</button>
         </ng-template>
     </app-stepper>
     <app-calendar [citas]="citas"></app-calendar>

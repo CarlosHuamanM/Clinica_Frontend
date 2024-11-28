@@ -1,103 +1,130 @@
-
 <!-- Paneles de métricas -->
 <div class="row gy-4">
-        <!-- Cantidad de consultas atendidas -->
-        <div class="col-md-6">
-            <div class="bg-info text-white p-4 rounded text-center">
-                <h6>Cantidad de consultas atendidas</h6>
-                <h1>150</h1>
-                <div class="dropdown">
-                    <select class="form-select form-select-sm" aria-label="Mes">
-                        <option selected>Enero</option>
-                        <option>Febrero</option>
-                        <option>Marzo</option>
-                    </select>
-                    <app-chart></app-chart>
-                </div>
-            </div>
+    <div class="col-md-6">
+        <div class="bg-info text-white p-4 rounded text-center">
+            <h2>Cantidad de citas</h2>
+            <form [formGroup]="formCitasPorMes">
+                <select name="year" class="form-select"
+                    (change)="loadChartDataCitasPorMes(formCitasPorMes.value.year ?? 2025, formCitasPorMes.value.month ?? 1)"
+                    formControlName="year" id="year">
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                </select>
+                <select name="month" class="form-select mt-2" formControlName="month" id="month"
+                    (change)="loadChartDataCitasPorMes(formCitasPorMes.value.year ?? 2025, formCitasPorMes.value.month ?? 1)">
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </form>
+            <button class="btn btn-primary w-100 mt-2"
+                (click)="downloadChartDataCitasPorMes(formCitasPorMes.value.year ?? 2024, formCitasPorMes.value.month ?? 11)"><i
+                    class="bi bi-box-arrow-in-down"></i></button>
+            <app-chart [type]="'bar'" [data]="dataCitasPorMes" [options]="optionsCitasPorMes"></app-chart>
         </div>
+    </div>
 
-        <!-- Tratamientos más solicitados -->
-        <div class="col-md-6">
-            <div class="bg-info text-white p-4 rounded">
-                <h6>Tratamientos más solicitados</h6>
-                <div class="d-flex justify-content-around align-items-center">
-                    <div class="text-center">
-                        <div class="bg-dark w-50 mx-auto" style="height: 50px;"></div>
-                        <small>Endodoncia</small>
-                    </div>
-                    <div class="text-center">
-                        <div class="bg-dark w-50 mx-auto" style="height: 50px;"></div>
-                        <small>Ortodoncia</small>
-                    </div>
-                    <div class="text-center">
-                        <div class="bg-dark w-50 mx-auto" style="height: 50px;"></div>
-                        <small>Cirugía</small>
-                    </div>
-                    <div class="text-center">
-                        <div class="bg-dark w-50 mx-auto" style="height: 50px;"></div>
-                        <small>Estética Dental</small>
-                    </div>
-                </div>
-            </div>
+    <div class="col-md-6">
+        <div class="bg-info text-white p-4 rounded text-center">
+            <h2>Citas por tipo de tratamiento</h2>
+            <form [formGroup]="formCitasPorMes">
+                <select name="year" class="form-select"
+                    (change)="loadChartDataCitasPorTipoTratamiento(formCitasPorMes.value.year ?? 2025, formCitasPorMes.value.month ?? 1)"
+                    formControlName="year" id="year">
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                </select>
+                <select name="month" class="form-select mt-2" formControlName="month" id="month"
+                    (change)="loadChartDataCitasPorTipoTratamiento(formCitasPorMes.value.year ?? 2025, formCitasPorMes.value.month ?? 1)">
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </form>
+            <button class="btn btn-primary w-100 mt-2"
+                (click)="downloadChartDataCitasPorTipoTratamiento(formCitasPorTipoTratamiento.value.year ?? 2024, formCitasPorTipoTratamiento.value.month ?? 11)"><i
+                    class="bi bi-box-arrow-in-down"></i></button>
+            <app-chart [type]="'bar'" [data]="dataCitasPorTipoTratamiento"
+                [options]="optionsCitasPorTipoTratamiento"></app-chart>
         </div>
+    </div>
 
-        <!-- Ganancia del mes y satisfacción -->
-        <div class="col-md-6">
-            <div class="bg-primary text-white p-4 rounded text-center">
-                <h6>Ganancia del mes</h6>
-                <h1>3.5K</h1>
-                <small>soles</small>
-            </div>
+    <div class="col-md-6">
+        <div class="bg-primary text-white p-4 rounded text-center">
+            <h2 class="text-dark">Citas por estado</h2>
+            <form [formGroup]="formCitasPorEstado">
+                <select name="year" class="form-select"
+                    (change)="loadChartDataCitasPorEstado(formCitasPorEstado.value.year ?? 2024, formCitasPorEstado.value.estado ?? 'Pendiente')"
+                    formControlName="year" id="year">
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                </select>
+                <select name="month" class="form-select mt-2" formControlName="estado" id="month"
+                    (change)="loadChartDataCitasPorEstado(formCitasPorEstado.value.year ?? 2024, formCitasPorEstado.value.estado ?? 'Pendiente')">
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Atendida">Atendida</option>
+                    <option value="Cancelada">Cancelada</option>
+                </select>
+            </form>
+            <button class="btn btn-primary w-100 mt-2"
+                (click)="downloadChartDataCitasPorEstado(formCitasPorEstado.value.year ?? 2024, formCitasPorEstado.value.estado ?? 'Pendiente')"><i
+                    class="bi bi-box-arrow-in-down"></i></button>
+            <app-chart [type]="'bar'" [data]="dataCitasPorEstado" [options]="optionsCitasPorEstado"></app-chart>
         </div>
-        <div class="col-md-6">
-            <div class="bg-primary text-white p-4 rounded text-center">
-                <h6>Satisfacción del cliente</h6>
-                <h1>3.9</h1>
-                <i class="bi bi-star-fill text-warning"></i>
-            </div>
-        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="bg-primary text-white p-4 rounded text-center">
 
-        <!-- Nuevos pacientes -->
-        <div class="col-md-6">
-            <div class="bg-info text-white p-4 rounded text-center">
-                <h6>Nuevos pacientes</h6>
-                <h1>30</h1>
-                <div class="dropdown">
-                    <select class="form-select form-select-sm" aria-label="Mes">
-                        <option selected>Enero</option>
-                        <option>Febrero</option>
-                        <option>Marzo</option>
-                    </select>
-                </div>
+        </div>
+    </div>
+
+    <!-- Nuevos pacientes -->
+    <div class="col-md-6">
+        <div class="bg-info text-white p-4 rounded text-center">
+            <h6>Nuevos pacientes</h6>
+            <h1>30</h1>
+            <div class="dropdown">
+                <select class="form-select form-select-sm" aria-label="Mes">
+                    <option selected>Enero</option>
+                    <option>Febrero</option>
+                    <option>Marzo</option>
+                </select>
             </div>
         </div>
     </div>
-    <div class="container py-4">
-        <!-- Número de citas por mes -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="bg-dark text-white p-3 rounded">
-                    <h5>Número de citas por mes</h5>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="dropdown">
-                            <select class="form-select form-select-sm" aria-label="Seleccionar año">
-                                <option selected>2024</option>
-                                <option>2023</option>
-                                <option>2022</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-        <!-- Ganancias por mes -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="bg-dark text-white p-3 rounded">
-                    <h5>Ganancias por mes</h5>
-                    <div class="dropdown mt-2">
+</div>
+<div class="container py-4">
+    <!-- Número de citas por mes -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="bg-dark text-white p-3 rounded">
+                <h5>Número de citas por mes</h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="dropdown">
                         <select class="form-select form-select-sm" aria-label="Seleccionar año">
                             <option selected>2024</option>
                             <option>2023</option>
@@ -107,4 +134,21 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Ganancias por mes -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="bg-dark text-white p-3 rounded">
+                <h5>Ganancias por mes</h5>
+                <div class="dropdown mt-2">
+                    <select class="form-select form-select-sm" aria-label="Seleccionar año">
+                        <option selected>2024</option>
+                        <option>2023</option>
+                        <option>2022</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

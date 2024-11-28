@@ -1,9 +1,9 @@
 .bg-info {
-    background-color: #1bc5bd !important;
+    background-color: var(--first-color) !important;
 }
 
 .bg-primary {
-    background-color: #3699ff !important;
+    background-color: #d5d5d5 !important;
 }
 
 .bg-dark {

@@ -28,4 +28,8 @@ export class CitaService {
   deleteCita(id: number): Observable<any>{
     return this.http.delete<any>(this.baseUrl + '/' + id);
   }
+
+  successCita(id: number): Observable<any>{
+    return this.http.put<any>(this.baseUrl + '/atender/' + id, {});
+  }
 }

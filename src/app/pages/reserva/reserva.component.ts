@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { StepperComponent } from '../../core/components/stepper/stepper.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -29,6 +29,8 @@ import { citaValidator } from '../../core/validators/cita.validator';
   styleUrl: './reserva.component.css'
 })
 export class ReservaComponent implements OnInit {
+
+  ocultarBotonReserva: boolean = false;
 
   //variables para la consulta de datos
   tratamientos!: Observable<Tratamiento[]>;
@@ -61,6 +63,8 @@ export class ReservaComponent implements OnInit {
   maxDate: Date = new Date(new Date().setMonth(new Date().getMonth() + 5, 0));
   minTimeValue: string | undefined = '';
   maxTimeValue: string | undefined = '';
+
+  @ViewChild('stepper') stepper!: StepperComponent;
 
   //variables para el formulario
   reservaForm: FormGroup;
@@ -238,7 +242,8 @@ export class ReservaComponent implements OnInit {
     this.citaService.createCita(reservaData).subscribe({
       next: (data) => {
         this.toastService.success(data.mensaje);
-
+        this.stepper.goToStep(0);
+        this.reservaForm.reset();
         this.citaService.getCitas({ usuarioId: this.userId }).subscribe({
           next: (citas) => {
             this.citas = citas;
