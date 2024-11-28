@@ -70,16 +70,21 @@ export class AuthService {
     return null;
   }
 
-  getDentistaId(): any{
-    if (typeof window !== 'undefined' && localStorage.getItem('token')){
-      const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
+  getDentistaId(): any {
+    if (typeof window !== 'undefined' && localStorage.getItem('token')) {
+      const token = localStorage.getItem('token');
+      console.log('Token cargado correctamente:', token); // Verifica si el token está en localStorage
+  
       if (token) {
         const decodedToken: any = jwtDecode(token);
+        console.log('Token decodificado:', decodedToken); // Verifica el contenido del token
         return decodedToken.dentistaId;
       }
     }
+    console.error('Token no disponible en localStorage o error al cargarlo.');
     return null;
   }
+  
 
   getNames(): any {
     if (typeof window !== 'undefined' && localStorage.getItem('token')){

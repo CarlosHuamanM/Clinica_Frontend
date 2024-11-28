@@ -19,6 +19,9 @@ export class HorarioService {
   getHorarios(queryparams: any): Observable<Horario[]> {
     return this.http.get<Horario[]>(this.baseUrl, { params: queryparams });
   }
+  createHorario(data:any): Observable<any>{
+    return this.http.post<any>(this.baseUrl, data);
+  }
 
   createHorario(data: any): Observable<any>{
     return this.http.post<any>(this.baseUrl, data);

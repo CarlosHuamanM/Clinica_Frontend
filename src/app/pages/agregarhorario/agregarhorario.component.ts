@@ -38,10 +38,18 @@ export class AgregarhorarioComponent implements OnInit {
   
   ngOnInit(): void {
     this.dentistaId = this.authService.getDentistaId();
-    console.log(this.dentistaId);
-    this.loadData({dentistaId: this.dentistaId});
+    console.log('Dentista ID en ngOnInit:', this.dentistaId);
+  
+    if (!this.dentistaId) {
+      console.error('No se pudo cargar el ID del dentista desde AuthService.');
+      this.toastService.error('Error al cargar los datos del usuario.');
+      return;
+    }
+    this.loadData({ dentistaId: this.dentistaId });
   }
+  
   loadData(queryparams: any): void {
+    this.dentistaId = this.authService.getDentistaId();
     this.horarios = this.horarioService.getHorarios(queryparams);
   }
 
