@@ -31,10 +31,11 @@ export class IniciosesionComponent {
       next: (response) => {
         localStorage.setItem('token', response.token);
         this.router.navigate(['/dashboard/reserva']);
+        this.toastService.success("Bienvenido");
       },
       error: (error) => {
         console.log('Error durante el login:' + error.message);
-        this.toastService.error(error.message);
+        this.toastService.error(error.error.message);
       }
     });
   }

@@ -99,6 +99,6 @@
     </div>
     <div modal-footer>
         <button type="button" class="btn btn-blue" (click)="modalCreate.close()">Cancelar</button>
-        <button type="button" class="btn btn-blue ms-2" (click)="registrarDentista()">Guardar</button>
+        <button type="button" [disabled]="dentistaForm.invalid" class="btn btn-blue ms-2" (click)="registrarDentista()">Crear</button>
     </div>
 </app-modal>

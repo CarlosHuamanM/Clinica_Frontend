@@ -32,8 +32,8 @@
           <td>S/.{{cita.tratamiento.costo}} PEN</td>
           <td>
             @if (cita.estado === 'Pendiente') {
-              <button class="btn cancelar" (click)="trackedCita = cita; modalCancelacion.open()">Cancelar</button>
-              <button class="btn reprogramar" (click)="trackedCita = cita; modalReprogramar.open(); establecerHorarios(cita)">Reprogramar</button>
+              <button class="btn cancelar" (click)="openModalToCancel(cita)">Cancelar</button>
+              <button class="btn reprogramar" (click)="establecerHorarios(cita); openModalToReprogramar(cita)">Reprogramar</button>
             }
           </td>
         </tr>
@@ -43,32 +43,46 @@
     </table>
   </div>
 </div>
-@if (trackedCita) {
-  <app-modal #modalCancelación>
-    <div modal-header>
-      <h5 class="modal-title">¿Desea cancelar la reserva?</h5>
-    </div>
-    <div modal-body>
+<app-modal #modalCancelación>
+  <div modal-header>
+    <h5 class="modal-title">¿Desea cancelar la reserva?</h5>
+  </div>
+  <div modal-body>
+      @if (trackedCita) {
       <p>La reserva para {{trackedCita.tratamiento.nombre}} con fecha {{trackedCita.fecha}} y hora {{trackedCita.hora}}
         será cancelada.</p>
+      }
     </div>
     <div modal-footer>
       <button class="btn btn-secondary" (click)="modalCancelacion.close()">Cancelar</button>
-      <button class="btn btn-primary" (click)="cancelarReserva(trackedCita.id)">Aceptar</button>
+      <button class="btn btn-primary" (click)="cancelarReserva()">Aceptar</button>
     </div>
   </app-modal>
-}
 <app-modal #modalReprogramar>
   <div modal-header>
     <h5 class="modal-title">¿Desea reprogramar la reserva?</h5>
   </div>
   <div modal-body>
-    <app-datepicker [disabledDates]="disabledDates" [minDate]="minDate" [maxDate]="maxDate" (dateSelected)="handleDateSelected($event)"></app-datepicker>
-    <form>
+    <form [formGroup]="formReprogramar">
+      <label class="form-label" for="fecha">Fecha:</label>
+      <input type="text" [disabled]="true" class="form-control" id="fecha" name="fecha" formControlName="fecha"
+      [class]="{'is-invalid': formReprogramar.get('fecha')?.invalid && formReprogramar.get('fecha')?.touched}">
+      <app-datepicker [disabledDates]="disabledDates" [minDate]="minDate" [maxDate]="maxDate" (dateSelected)="handleDateSelected($event)"></app-datepicker>
+      <small class="form-text text-danger"
+        [hidden]="formReprogramar.get('fecha')?.valid || !formReprogramar.get('fecha')?.touched">La
+        fecha es obligatoria.</small>
+      <label class="form-label" for="hora">Hora:</label>
+      <input type="time" class="form-control" id="hora" name="hora" formControlName="hora"
+        [class]="{'is-invalid': formReprogramar.get('hora')?.invalid && formReprogramar.get('hora')?.touched}">
+        <small class="form-text text-danger"
+        [hidden]="!formReprogramar.get('hora')?.hasError('outOfRange') || !formReprogramar.get('hora')?.touched">El
+        horario de atención es de {{horarioSelected?.horaComienzo}} a {{horarioSelected?.horaFin}}</small>
+    <small class="form-text text-danger mt-1"
+        [hidden]="!formReprogramar.get('hora')?.hasError('citaInvalid')">Ya hay un cita reservada en este horario</small>
     </form>
   </div>
   <div modal-footer>
     <button class="btn btn-secondary" (click)="modalReprogramar.close()">Cancelar</button>
-    <button class="btn btn-primary" (click)="reprogramarReserva(trackedCita.id)">Aceptar</button>
+    <button class="btn btn-primary" [disabled]="formReprogramar.invalid && activarBoton" (click)="reprogramarReserva()">Reprogramar</button>
   </div>
 </app-modal>

@@ -10,8 +10,6 @@ export function citaValidator(citaService: CitaService, fecha: string, tratamien
       return of(null);
     }
 
-    console.log(fecha, value, tratamientoId);
-
     return citaService.getValidationByDateAndHour({
       fecha: fecha,
       hora: value,

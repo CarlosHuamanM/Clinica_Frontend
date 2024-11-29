@@ -25,9 +25,9 @@ export const routes: Routes = [
     {path: 'dashboard' ,component: DashboardComponent, children: [
         {path: 'reserva' ,component: ReservaComponent, canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}},
         {path: 'historial' ,component: HistorialComponent, canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}},
-        {path: 'administrador' ,component: AdministradorComponent, canActivate: [roleGuard], data: {roles: ['DENTISTA', 'ADMINISTRADOR']}},
+        {path: 'administrador' ,component: AdministradorComponent, canActivate: [roleGuard], data: {roles: ['ADMINISTRADOR']}},
         {path: 'reportes' ,component: ReportesComponent, canActivate: [roleGuard], data: {roles: ['DENTISTA', 'ADMINISTRADOR']}},
-        {path: 'agregarhorario' ,component: AgregarhorarioComponent, canActivate: [roleGuard], data: {roles: ['DENTISTA', 'ADMINISTRADOR']}},
-        {path: 'gestioncitas' ,component: GestionCitasComponent, canActivate: [roleGuard], data: {roles: ['DENTISTA', 'ADMINISTRADOR']}},
+        {path: 'agregarhorario' ,component: AgregarhorarioComponent, canActivate: [roleGuard], data: {roles: ['DENTISTA']}},
+        {path: 'gestioncitas' ,component: GestionCitasComponent, canActivate: [roleGuard], data: {roles: ['DENTISTA']}},
     ], canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}}
 ];

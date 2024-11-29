@@ -1,18 +1,20 @@
 
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ChartComponent } from '../../core/components/chart/chart.component';
-import { CitaPorMesDTO } from '../../core/interfaces/cita-por-mes-dto';
 import { ReporteService } from '../../core/services/reporte.service';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CitaPorTipoTratamientoDTO } from '../../core/interfaces/cita-por-tipo-tratamiento-dto';
-import { ChartOptions } from 'chart.js';
-import { CitaPorEstadoDTO } from '../../core/interfaces/cita-por-estado-dto';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
+import { Observable } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
+import { CitaSexo } from '../../core/interfaces/cita-sexo';
+import { CitaTipoTratamiento } from '../../core/interfaces/cita-tipo-tratamiento';
+import { CitaCancelada } from '../../core/interfaces/cita-cancelada';
+import { CitaDentista } from '../../core/interfaces/cita-dentista';
 
 @Component({
   selector: 'app-reportes',
   standalone: true,
-  imports: [ChartComponent, ReactiveFormsModule],
+  imports: [ChartComponent, ReactiveFormsModule, AsyncPipe],
   templateUrl: './reportes.component.html',
   styleUrl: './reportes.component.css'
 })
@@ -21,125 +23,74 @@ export class ReportesComponent implements OnInit {
   authService = inject(AuthService);
   userId!: number;
 
-  dataCitasPorMes: any;
-  optionsCitasPorMes: any;
-  formCitasPorMes = new FormGroup({
-      year: new FormControl(2024),
-      month: new FormControl(11),
+  dataCitasPorSexo: any;
+  optionsCitasPorSexo: any;
+  formCitasPorSexo = new FormGroup({
+    startDate: new FormControl('2024-11-01', Validators.required),
+    endDate: new FormControl('2024-12-12', Validators.required),
   });
 
   dataCitasPorTipoTratamiento: any;
   optionsCitasPorTipoTratamiento: any;
   formCitasPorTipoTratamiento = new FormGroup({
-    year: new FormControl(2024),
-    month: new FormControl(11),
+    startDate: new FormControl('2024-11-01', Validators.required),
+    endDate: new FormControl('2024-12-12', Validators.required),
   });
 
-  dataCitasPorEstado: any;
-  optionsCitasPorEstado: any;
-  formCitasPorEstado = new FormGroup({
-    year: new FormControl(2024),
-    estado: new FormControl('Pendiente'),
+  dataCitasCanceladas: any;
+  optionsCitasCanceladas: any;
+  formCitasCanceladas = new FormGroup({
+    startDate: new FormControl('2024-11-01', Validators.required),
+    endDate: new FormControl('2024-12-12', Validators.required),
   });
+
+  dataCitasPorDentista!: Observable<CitaDentista[]>;
+
 
   ngOnInit(): void {
     this.userId = this.authService.getUserId();
-    this.loadChartDataCitasPorMes(2024, 11);
-    this.loadChartDataCitasPorTipoTratamiento(2024, 11);
-    this.loadChartDataCitasPorEstado(2024, 'Pendiente');
+    this.loadChartDataCitasPorSexo('2024-11-01', '2024-12-12');
+    this.loadChartDataCitasPorTipoTratamiento('2024-11-01', '2024-12-12');
+    this.loadChartDataCitasCanceladas('2024-11-01', '2024-12-12');
+    this.loadDataCitasPorDentista('2024-11-01', '2024-12-12', 'Pendiente');
   }
   constructor(private reporteService: ReporteService, private changeDetectorRef: ChangeDetectorRef) {
   }
+
+  loadChartDataCitasPorSexo(startDate: string, endDate: string): void {
+    this.reporteService.countCitasByDateAndSexo({ startDate, endDate }).subscribe((data: CitaSexo[]) => {
+      const masculinoData = data.find(d => d.sexo.toLowerCase() === 'masculino')?.total || 0;
+      const femeninoData = data.find(d => d.sexo.toLowerCase() === 'femenino')?.total || 0;
   
-  
-  loadChartDataCitasPorMes(year:number, month: number): void {
-    this.reporteService.getReportePorMesYSexo(year, month).subscribe((data: CitaPorMesDTO[]) => {
-      const mesesLabels = [...new Set(data.map(d => this.convertNumberToMonth(d.mes)))];
-      const meses = [...new Set(data.map(d => d.mes))];
-      const masculinos = meses.map(mes => 
-        data.find(d => d.mes === mes && d.sexo === 'MASCULINO')?.total || 0
-      );
-      const femeninos = meses.map(mes => 
-        data.find(d => d.mes === mes && d.sexo === 'FEMENINO')?.total || 0
-      );
-      this.dataCitasPorMes = {
-        labels: mesesLabels,
+      this.dataCitasPorSexo = {
+        labels: ['Sexo'],
         datasets: [
           {
             label: 'Masculino',
-            data: masculinos,
-            backgroundColor: '#01cfc9',
-            borderColor: 'white',
+            data: [masculinoData],
+            backgroundColor: 'rgba(50, 168, 82)',
+            borderColor: 'rgb(255, 255, 255)',
             borderWidth: 2
           },
           {
             label: 'Femenino',
-            data: femeninos,
-            backgroundColor: '#FFB1C1',
-            borderColor: 'white',
+            data: [femeninoData],
+            backgroundColor: 'rgba(54, 209, 207)',
+            borderColor: 'rgb(255, 255, 255)',
             borderWidth: 2
           }
         ]
-      }
-      this.optionsCitasPorMes = {
-        scales: {
-          x: {
-            ticks: {
-              color: 'white',
-            },
-            border: {
+      };
+  
+      this.optionsCitasPorSexo = {
+        plugins: {
+          legend: {
+            display: true,
+            labels: {
               color: 'white'
             }
-          },
-          y: {
-            title: {
-              display: true,
-              text: '# de citas',
-              color: 'white'
-            },
-            ticks: {
-              color: 'white',
-            },
-            beginAtZero: true
           }
-        }
-      }
-      this.changeDetectorRef.detectChanges();
-    });
-  }
-  downloadChartDataCitasPorMes(year:number, month: number): void {
-    this.reporteService.downloadReportePorMesYSexo(year, month, this.userId).subscribe(
-      (data) => {
-        const blob = new Blob([data], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        window.open(url);
-      }
-    )
-  }
-
-  loadChartDataCitasPorTipoTratamiento(year:number, month: number): void{
-    this.reporteService.getReportePorTipoTratamiento(year, month).subscribe((data: CitaPorTipoTratamientoDTO[]) => {
-      const tiposTratamiento = [...new Set(data.map(d => d.tipoTratamiento))];
-      const totales = data.map(d => d.total);
-      this.dataCitasPorTipoTratamiento = {
-        labels: tiposTratamiento,
-        datasets: [
-          {
-            label: 'Tratamientos',
-            data: totales,
-            backgroundColor: [
-              'rgba(255, 99, 132)',
-              'rgba(255, 159, 64)',
-              'rgba(255, 205, 86)'
-            ],
-            borderColor: [
-              'rgb(255, 255, 255)'
-            ],
-            borderWidth: 2
-          }
-        ]
-      }
-      this.optionsCitasPorTipoTratamiento = {
+        },
         scales: {
           x: {
             ticks: {
@@ -162,29 +113,74 @@ export class ReportesComponent implements OnInit {
           }
         }
       };
+  
       this.changeDetectorRef.detectChanges();
     });
   }
+  
+  
 
-  downloadChartDataCitasPorTipoTratamiento(year:number, month: number): void {
-    this.reporteService.downloadReportePorTipoTratamiento(year, month, this.userId).subscribe(
-      (data) => {
-        const blob = new Blob([data], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        window.open(url);
-      }
-    )
-  }
+  loadChartDataCitasPorTipoTratamiento(startDate: string, endDate: string): void {
+    this.reporteService.countCitasByDateAndTipoTratamiento({ startDate, endDate }).subscribe((data: CitaTipoTratamiento[]) => {
+      const datasets = data.map((tratamiento, index) => ({
+        label: tratamiento.tipoTratamiento,
+        data: [tratamiento.total],
+        backgroundColor: `hsl(${(index * 360) / data.length}, 70%, 60%)`,
+        borderColor: 'rgb(255, 255, 255)',
+        borderWidth: 2
+      }));
+  
+      this.dataCitasPorTipoTratamiento = {
+        labels: ['Tipos de tratamiento'],
+        datasets
+      };
+  
+      this.optionsCitasPorTipoTratamiento = {
+        plugins: {
+          legend: {
+            display: true,
+            labels: {
+              color: 'white'
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: {
+              color: 'white',
+            },
+            border: {
+              color: 'white'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: '# de citas',
+              color: 'white'
+            },
+            ticks: {
+              color: 'white',
+            },
+            beginAtZero: true
+          }
+        }
+      };
+  
+      this.changeDetectorRef.detectChanges();
+    });
+  }  
+  
 
-  loadChartDataCitasPorEstado(year:number, estado: string): void{
-    this.reporteService.getReportePorEstadoCita(year, estado).subscribe((data: CitaPorEstadoDTO[]) => {
-      const meses = [...new Set(data.map(d => this.convertNumberToMonth(d.mes)))];
+  loadChartDataCitasCanceladas(startDate: string, endDate: string): void {
+    this.reporteService.countCitasCanceladasByFecha({ startDate, endDate }).subscribe((data: CitaCancelada[]) => {
+      const fechas = [...new Set(data.map(d => d.fecha))];
       const totales = data.map(d => d.total);
-      this.dataCitasPorEstado = {
-        labels: meses,
+      this.dataCitasCanceladas = {
+        labels: fechas,
         datasets: [
           {
-            label: 'Estados',
+            label: 'Canceladas',
             data: totales,
             backgroundColor: [
               'rgba(255, 99, 132, 0.4)',
@@ -208,7 +204,7 @@ export class ReportesComponent implements OnInit {
           }
         ]
       }
-      this.optionsCitasPorEstado = {
+      this.optionsCitasCanceladas = {
         scales: {
           x: {
             ticks: {
@@ -235,18 +231,19 @@ export class ReportesComponent implements OnInit {
     });
   }
 
-  downloadChartDataCitasPorEstado(year:number, estado: string): void {
-    this.reporteService.downloadReportePorEstadoCita(year, estado, this.userId).subscribe(
-      (data) => {
-        const blob = new Blob([data], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        window.open(url);
-      }
-    )
+  loadDataCitasPorDentista(startDate: string, endDate: string, estado: string): void {
+    const queryparams = {
+      startDate,
+      endDate,
+      estado
+    };
+    this.dataCitasPorDentista = this.reporteService.countCitasAtendidasPorDentista(queryparams);
   }
+
   convertNumberToMonth(month: number): string {
     const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     return months[month - 1];
   }
+
 }
 

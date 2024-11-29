@@ -1,9 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnChanges, OnInit, PLATFORM_ID, SimpleChanges, ViewChild } from '@angular/core';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
-import { CitaService } from '../../services/cita.service';
-import { ReporteService } from '../../services/reporte.service';
-import { CitaPorMesDTO } from '../../interfaces/cita-por-mes-dto';
+
+
 
 Chart.register(...registerables);
 
