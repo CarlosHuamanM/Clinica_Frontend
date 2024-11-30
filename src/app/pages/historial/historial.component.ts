@@ -1,11 +1,11 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CitaService } from '../../core/services/cita.service';
 import { Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { ModalComponent } from '../../core/components/modal/modal.component';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatepickerComponent } from '../../core/components/datepicker/datepicker.component';
 import { HorarioService } from '../../core/services/horario.service';
 import { timeRangeValidator } from '../../core/validators/time-range.validator';
@@ -16,13 +16,22 @@ import { Cita } from '../../core/interfaces/cita';
 @Component({
   selector: 'app-historial',
   standalone: true,
-  imports: [AsyncPipe, ModalComponent, DatepickerComponent, ReactiveFormsModule],
+  imports: [ModalComponent, DatepickerComponent, ReactiveFormsModule, CommonModule],
   templateUrl: './historial.component.html',
   styleUrl: './historial.component.css'
 })
 export class HistorialComponent implements OnInit {
 
-  citas!: Observable<Cita[]>;
+  currentPageCita: number = 1;
+  totalPagesCita: number = 1;
+  paginatedCitas: Cita[] = [];
+
+  formCitas = new FormGroup({
+    fechaInicio: new FormControl('2024-11-01', Validators.required),
+    fechaFin: new FormControl('2024-12-12', Validators.required),
+    estado: new FormControl('Pendiente', Validators.required),
+  });
+  
   citaService = inject(CitaService);
   authService = inject(AuthService);
   horarioService = inject(HorarioService);
@@ -54,7 +63,29 @@ export class HistorialComponent implements OnInit {
   }
   ngOnInit(): void {
     this.userId = this.authService.getUserId();
-    this.citas = this.citaService.getCitas({ usuarioId: this.userId });
+    this.loadData();
+  }
+  loadData(): void {
+    this.citaService.getCitas({ usuarioId: this.userId }).subscribe((data) => {
+      this.totalPagesCita = Math.ceil(data.length / 5);
+      this.paginatedCitas = this.paginate(data, this.currentPageCita, 5);
+    });
+  }
+  loadDataWithParams(): void {
+    this.citaService.getCitas({ usuarioId: this.userId, fechaInicio: this.formCitas.get('fechaInicio')?.value ?? '2024-11-01', fechaFin: this.formCitas.get('fechaFin')?.value ?? '2024-12-12', estado: this.formCitas.get('estado')?.value ?? 'Pendiente' }).subscribe((data) => {
+      this.totalPagesCita = Math.ceil(data.length / 5);
+      this.paginatedCitas = this.paginate(data, this.currentPageCita, 5);
+    });
+  }
+  paginate(data: any[], currentPage: number, pageSize: number): any[] {
+    const start = (currentPage - 1) * pageSize;
+    const end = currentPage * pageSize;
+    return data.slice(start, end);
+  }
+  onPageChangeCita(page: number): void {
+    if (page < 1 || page > this.totalPagesCita) return;
+    this.currentPageCita = page;
+    this.loadDataWithParams();
   }
   openModalToCancel(cita: Cita) {
     this.trackedCita = cita;
@@ -73,7 +104,7 @@ export class HistorialComponent implements OnInit {
     this.citaService.deleteCita(this.trackedCita.id).subscribe({
       next: (data) => {
         this.toastService.success(data.mensaje);
-        this.citas = this.citaService.getCitas({ usuarioId: this.userId });
+        this.loadDataWithParams();
       },
       error: (error) => {
         console.log('Error al cancelar la reserva:' + error.message);
@@ -103,7 +134,7 @@ export class HistorialComponent implements OnInit {
       next: (data) => {
         this.toastService.success(data.mensaje);
         this.modalReprogramar.close();
-        this.citas = this.citaService.getCitas({ usuarioId: this.userId });
+        this.loadDataWithParams();
       },
       error: (error) => {
         console.error('Error al reprogramar la reserva:', error);

@@ -135,7 +135,7 @@ export class ReservaComponent implements OnInit {
     const target = event.target as HTMLSelectElement;
     const especialidad = target.value;
     const queryparams = {
-      especialidad: especialidad
+      especializacion: especialidad
     };
     this.dentistas = this.dentistaService.getDentistas(queryparams);
     this.reservaForm.get('tipo')?.get('dentistaId')?.enable();

@@ -19,8 +19,7 @@ export class IniciosesionComponent {
   showPassword = false;
 
   loginform= new FormGroup({
-    correo:new FormControl('', [Validators.required, Validators.email,
-      Validators.pattern('^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@gmail.com$')
+    correo:new FormControl('', [Validators.required, Validators.email
     ]),
     contrasena: new FormControl('')
   });

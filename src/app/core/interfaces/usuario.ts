@@ -6,6 +6,7 @@ export interface Usuario {
     apellidoPaterno: string;
     apellidoMaterno: string;
 
+    telefono: string;
     numeroIdentidad: string;
     sexo: string;
     fechaNacimiento: string;

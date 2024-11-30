@@ -15,6 +15,7 @@ export interface Cita {
 
     tipoDocumento: TipoDocumento;
     numeroIdentidad: string;
+    telefono: string;
     sexo: string;
     fechaNacimiento: string;
     estado: string;

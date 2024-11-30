@@ -10,18 +10,22 @@
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Detalles</th>
-                <th>Acción</th>
-                <th>Acción</th>
+                <th>Especialidad</th>
+                <th>Número de colegiatura</th>
+                <th>Telefono</th>
+                <th>Tipo de documento</th>
+                <th>Número de identidad</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let dentista of paginatedDentistas">
                 <td>{{ dentista.id }}</td>
                 <td>{{ dentista.nombres }}</td>
-                <td><button class="btn btn-blue">Ver detalles</button></td>
-                <td><button class="btn btn-blue">Editar</button></td>
-                <td><button class="btn btn-blue">Eliminar</button></td>
+                <td>{{ dentista.especializacion }}</td>
+                <td>{{ dentista.ncolegiatura }}</td>
+                <td>{{ dentista.telefono }}</td>
+                <td>{{ dentista.tipoDocumento.nombre }}</td>
+                <td>{{ dentista.numeroIdentidad }}</td>
             </tr>
         </tbody>
     </table>

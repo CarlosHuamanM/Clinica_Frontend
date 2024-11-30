@@ -5,16 +5,17 @@ import { ReporteService } from '../../core/services/reporte.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 import { CitaSexo } from '../../core/interfaces/cita-sexo';
 import { CitaTipoTratamiento } from '../../core/interfaces/cita-tipo-tratamiento';
 import { CitaCancelada } from '../../core/interfaces/cita-cancelada';
 import { CitaDentista } from '../../core/interfaces/cita-dentista';
+import { DataReport } from '../../core/interfaces/data-report';
 
 @Component({
   selector: 'app-reportes',
   standalone: true,
-  imports: [ChartComponent, ReactiveFormsModule, AsyncPipe],
+  imports: [ChartComponent, ReactiveFormsModule, AsyncPipe, DatePipe, CommonModule],
   templateUrl: './reportes.component.html',
   styleUrl: './reportes.component.css'
 })
@@ -22,6 +23,10 @@ export class ReportesComponent implements OnInit {
 
   authService = inject(AuthService);
   userId!: number;
+  userRole!: string;
+  currentPageReport: number = 1;
+  totalPagesReport: number = 1;
+  paginatedReports: DataReport[] = [];
 
   dataCitasPorSexo: any;
   optionsCitasPorSexo: any;
@@ -45,23 +50,46 @@ export class ReportesComponent implements OnInit {
   });
 
   dataCitasPorDentista!: Observable<CitaDentista[]>;
+  formCitasPorDentista = new FormGroup({
+    startDate: new FormControl('2024-11-01', Validators.required),
+    endDate: new FormControl('2024-12-12', Validators.required),
+    estado: new FormControl('Pendiente', Validators.required),
+  });
 
 
   ngOnInit(): void {
     this.userId = this.authService.getUserId();
+    this.userRole = this.authService.getUserRole();
     this.loadChartDataCitasPorSexo('2024-11-01', '2024-12-12');
     this.loadChartDataCitasPorTipoTratamiento('2024-11-01', '2024-12-12');
     this.loadChartDataCitasCanceladas('2024-11-01', '2024-12-12');
     this.loadDataCitasPorDentista('2024-11-01', '2024-12-12', 'Pendiente');
+    this.loadDataReports();
   }
   constructor(private reporteService: ReporteService, private changeDetectorRef: ChangeDetectorRef) {
+  }
+  loadDataReports(): void {
+    this.reporteService.getDataReports().subscribe((data) => {
+      this.totalPagesReport = Math.ceil(data.length / 10);
+      this.paginatedReports = this.paginate(data, this.currentPageReport, 10);
+    });
+  }
+  paginate(data: any[], currentPage: number, pageSize: number): any[] {
+    const start = (currentPage - 1) * pageSize;
+    const end = currentPage * pageSize;
+    return data.slice(start, end);
+  }
+  onPageChangeReport(page: number): void {
+    if (page < 1 || page > this.totalPagesReport) return;
+    this.currentPageReport = page;
+    this.loadDataReports();
   }
 
   loadChartDataCitasPorSexo(startDate: string, endDate: string): void {
     this.reporteService.countCitasByDateAndSexo({ startDate, endDate }).subscribe((data: CitaSexo[]) => {
       const masculinoData = data.find(d => d.sexo.toLowerCase() === 'masculino')?.total || 0;
       const femeninoData = data.find(d => d.sexo.toLowerCase() === 'femenino')?.total || 0;
-  
+
       this.dataCitasPorSexo = {
         labels: ['Sexo'],
         datasets: [
@@ -81,7 +109,7 @@ export class ReportesComponent implements OnInit {
           }
         ]
       };
-  
+
       this.optionsCitasPorSexo = {
         plugins: {
           legend: {
@@ -113,12 +141,12 @@ export class ReportesComponent implements OnInit {
           }
         }
       };
-  
+
       this.changeDetectorRef.detectChanges();
     });
   }
-  
-  
+
+
 
   loadChartDataCitasPorTipoTratamiento(startDate: string, endDate: string): void {
     this.reporteService.countCitasByDateAndTipoTratamiento({ startDate, endDate }).subscribe((data: CitaTipoTratamiento[]) => {
@@ -129,12 +157,12 @@ export class ReportesComponent implements OnInit {
         borderColor: 'rgb(255, 255, 255)',
         borderWidth: 2
       }));
-  
+
       this.dataCitasPorTipoTratamiento = {
         labels: ['Tipos de tratamiento'],
         datasets
       };
-  
+
       this.optionsCitasPorTipoTratamiento = {
         plugins: {
           legend: {
@@ -166,11 +194,11 @@ export class ReportesComponent implements OnInit {
           }
         }
       };
-  
+
       this.changeDetectorRef.detectChanges();
     });
-  }  
-  
+  }
+
 
   loadChartDataCitasCanceladas(startDate: string, endDate: string): void {
     this.reporteService.countCitasCanceladasByFecha({ startDate, endDate }).subscribe((data: CitaCancelada[]) => {
@@ -240,6 +268,55 @@ export class ReportesComponent implements OnInit {
     this.dataCitasPorDentista = this.reporteService.countCitasAtendidasPorDentista(queryparams);
   }
 
+  downloadReportCitasPorSexo(startDate: string, endDate: string): void {
+    const queryparams = {
+      startDate,
+      endDate,
+      usuarioId: this.userId
+    };
+    this.reporteService.downloadReportCitasPorSexo(queryparams).subscribe((data: any) => {
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      window.open(url);
+    });
+  }
+  downloadReportCitasPorTipo(startDate: string, endDate: string): void {
+    const queryparams = {
+      startDate,
+      endDate,
+      usuarioId: this.userId
+    };
+    this.reporteService.downloadReportCitasPorTipo(queryparams).subscribe((data: any) => {
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      window.open(url);
+    });
+  }
+  downloadReportCitasCanceladas(startDate: string, endDate: string): void {
+    const queryparams = {
+      startDate,
+      endDate,
+      usuarioId: this.userId
+    };
+    this.reporteService.downloadReportCitasPorEstado(queryparams).subscribe((data: any) => {
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      window.open(url);
+    });
+  }
+  downloadReportCitasPorDentista(startDate: string, endDate: string, estado: string): void {
+    const queryparams = {
+      startDate,
+      endDate,
+      estado,
+      usuarioId: this.userId
+    };
+    this.reporteService.downloadReportCitasPorFecha(queryparams).subscribe((data: any) => {
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      window.open(url);
+    });
+  }
   convertNumberToMonth(month: number): string {
     const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     return months[month - 1];
