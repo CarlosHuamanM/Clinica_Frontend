@@ -5,7 +5,9 @@ export interface Dentista {
     ncolegiatura: string;
     estado: boolean;
     especializacion: string;
+    usuarioId: number;
     nombres: string;
+    correo: string;
     apellidoPaterno: string;
     apellidoMaterno: string;
     tipoDocumento: TipoDocumento;

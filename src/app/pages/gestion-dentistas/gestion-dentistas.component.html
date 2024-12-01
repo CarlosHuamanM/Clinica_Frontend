@@ -1,7 +1,9 @@
 <section class="mb-5">
     <h4 class="fw-bold">Dentistas</h4>
     <div class="d-flex justify-content-between mb-3">
-        <input type="text" class="form-control w-50" placeholder="Buscar">
+        <form [formGroup]="dentistaBusqueda" class="w-50">
+            <input type="text" class="form-control" formControlName="nombre" (change)="onChangeDentista($event)" placeholder="Buscar">
+        </form>
         <button class="btn btn-blue" (click)="openModalToCreate()">Agregar</button>
     </div>
 
@@ -15,6 +17,8 @@
                 <th>Telefono</th>
                 <th>Tipo de documento</th>
                 <th>Número de identidad</th>
+                <th>Acción</th>
+                <th>Acción</th>
             </tr>
         </thead>
         <tbody>
@@ -26,6 +30,8 @@
                 <td>{{ dentista.telefono }}</td>
                 <td>{{ dentista.tipoDocumento.nombre }}</td>
                 <td>{{ dentista.numeroIdentidad }}</td>
+                <td><button class="btn btn-blue" (click)="openModalToEdit(dentista)">Editar</button></td>
+                <td><button class="btn btn-blue" (click)="openModalToDelete(dentista)">Eliminar</button></td>
             </tr>
         </tbody>
     </table>
@@ -50,7 +56,7 @@
 </section>
 <app-modal #modalCreate>
     <div modal-header>
-        <h4>Agregar dentista</h4>
+        <h4>{{accionFormlario}}</h4>
     </div>
     <div modal-body>
         <form [formGroup]="dentistaForm">
@@ -103,6 +109,25 @@
     </div>
     <div modal-footer>
         <button type="button" class="btn btn-blue" (click)="modalCreate.close()">Cancelar</button>
-        <button type="button" [disabled]="dentistaForm.invalid" class="btn btn-blue ms-2" (click)="registrarDentista()">Crear</button>
+        @if (accionFormlario === 'Nuevo dentista') {
+            <button type="button" [disabled]="dentistaForm.invalid" class="btn btn-blue ms-2" (click)="registrarDentista()">Crear</button>
+        }
+        @if (accionFormlario === 'Editar dentista') {
+            <button type="button" [disabled]="dentistaForm.invalid" class="btn btn-blue ms-2" (click)="editarDentista()">Editar</button>
+        }
+    </div>
+</app-modal>
+<app-modal #modalDelete>
+    <div modal-header>
+        <h4>Eliminar dentista</h4>
+    </div>
+    <div modal-body>
+        @if (dentistaTracked) {
+            <p>¿Está seguro de descartar el perfil de dentista asignado al correo "{{dentistaTracked.correo}}"?</p>
+        }
+    </div>
+    <div modal-footer>
+        <button type="button" class="btn btn-blue" (click)="modalDelete.close()">Cancelar</button>
+        <button type="button" class="btn btn-blue ms-2" (click)="eliminarDentista()">Eliminar</button>
     </div>
 </app-modal>

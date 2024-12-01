@@ -38,6 +38,7 @@
                         <label for="documento">Documento</label>
                         <input type="text" class="form-control" formControlName="documento" id="documento"
                             placeholder="Ingrese su documento" required
+                            (change)="registerForm.get('nombres')?.reset(); registerForm.get('apellidoPaterno')?.reset(); registerForm.get('apellidoMaterno')?.reset();"
                             [class]="{'invalid': registerForm.get('documento')?.invalid && registerForm.get('documento')?.touched}">
                         <small class="form-text text-danger"
                             [hidden]="!registerForm.get('documento')?.invalid || !registerForm.get('documento')?.touched">El

@@ -8,6 +8,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { ModalComponent } from '../../core/components/modal/modal.component';
 import { ageValidator } from '../../core/validators/age.validator';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-registro',
   standalone: true,
@@ -22,6 +23,7 @@ export class RegistroComponent implements OnInit {
 
   tipoDocumentoService = inject(TipoDocumentoService);
   authService = inject(AuthService);
+  toastService = inject(ToastrService);
 
   mostrarBotonDni = false;
   desactivarBotonDni = false;
@@ -102,7 +104,7 @@ export class RegistroComponent implements OnInit {
       },
       error: (error) => {
         console.log('Error:' + error.message);
-        alert(error.message);
+        this.toastService.error(error.error.message);
       }
     });
     this.desactivarBotonDni = false;
@@ -117,7 +119,7 @@ export class RegistroComponent implements OnInit {
       },
       error: (error) => {
         console.log('Error:' + error.message);
-        alert(error.message);
+        this.toastService.error(error.error.message);
       }
     });
   }
@@ -126,7 +128,7 @@ export class RegistroComponent implements OnInit {
     if(this.codigoControl.value === this.codigoGenerado){
       this.registrar();
     }else{
-      alert('El código no es correcto');
+      this.toastService.error('El código no es correcto');
     }
   }
 
@@ -144,10 +146,11 @@ export class RegistroComponent implements OnInit {
       next: (response) => {
         localStorage.setItem('token', response.token);
         this.router.navigate(['/dashboard/reserva']);
+        this.toastService.success('Bienvenido');
       },
       error: (error) => {
         console.log('Error durante el registro:' + error.message);
-        alert(error.message);
+        this.toastService.error(error.error.message);
       }
     });
   }

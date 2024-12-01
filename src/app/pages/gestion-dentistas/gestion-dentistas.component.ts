@@ -29,14 +29,17 @@ export class GestionDentistasComponent implements OnInit {
 
 
   Dentistas!: Observable<Dentista[]>;
-  DentistasService = inject(DentistaService);
+  dentistasService = inject(DentistaService);
   usuarioService = inject(UsuarioService);
   toastService = inject(ToastrService);
   usuarios!: Observable<Usuario[]>;
 
   usuarioTracked!: Usuario;
+  dentistaTracked!: Dentista;
+  accionFormlario: string = '';
 
   @ViewChild('modalCreate') modalCreate!: ModalComponent;
+  @ViewChild('modalDelete') modalDelete!: ModalComponent;
 
   dentistaForm = new FormGroup({
     nColegiatura: new FormControl('', [Validators.minLength(5), Validators.maxLength(5)]),
@@ -48,6 +51,9 @@ export class GestionDentistasComponent implements OnInit {
     nombre: new FormControl(''),
   });
 
+  dentistaBusqueda = new FormGroup({
+    nombre: new FormControl(''),
+  });
 
 
   ngOnInit(): void {
@@ -55,7 +61,7 @@ export class GestionDentistasComponent implements OnInit {
     this.loadUsuarios();
   }
   loadData(): void {
-    this.DentistasService.getDentistas().subscribe((data) => {
+    this.dentistasService.getDentistas().subscribe((data) => {
       this.totalPagesDentista = Math.ceil(data.length / 3);
       this.paginatedDentistas = this.paginate(data, this.currentPageDentista, 3);
     });
@@ -94,8 +100,36 @@ export class GestionDentistasComponent implements OnInit {
     this.dentistaForm.get('usuarioId')?.setValue(usuario.id.toString());
     console.log(this.dentistaForm.get('usuarioId')?.value);
   }
+
+  onChangeDentista(event: Event){
+    const target = event.target as HTMLInputElement;
+    const queryparams = {
+      nombre: target.value
+    };
+    this.dentistasService.getDentistas(queryparams).subscribe((data) => {
+      this.totalPagesDentista = Math.ceil(data.length / 3);
+      this.paginatedDentistas = this.paginate(data, this.currentPageDentista, 3);
+    });
+  }
+
   openModalToCreate(){
+    this.accionFormlario = 'Nuevo dentista';
+    this.dentistaForm.reset();
     this.modalCreate.open();
+  }
+  openModalToEdit(dentista: Dentista){
+    this.accionFormlario = 'Editar dentista';
+    this.dentistaTracked = dentista;
+    this.dentistaForm.patchValue({
+      nColegiatura: dentista.ncolegiatura,
+      especialidad: dentista.especializacion,
+      usuarioId: dentista.usuarioId.toString(),
+    });
+    this.modalCreate.open();
+  }
+  openModalToDelete(dentista: Dentista){
+    this.dentistaTracked = dentista;
+    this.modalDelete.open();
   }
   
   registrarDentista(){
@@ -104,12 +138,47 @@ export class GestionDentistasComponent implements OnInit {
       especializacion: this.dentistaForm.get('especialidad')?.value??'',
       usuarioId: this.dentistaForm.get('usuarioId')?.value??'',
     };
-    this.DentistasService.createDentista(data).subscribe({
+    this.dentistasService.createDentista(data).subscribe({
       next: (response) => {
         this.toastService.success(response.mensaje);
         this.loadUsuarios();
         this.loadData();
         this.modalCreate.close();
+      },
+      error: (error) => {
+        console.log('Error durante el registro:' + error.message);
+        this.toastService.error('Error durante el registro: ' + error.message);
+      }
+    });
+  }
+
+  editarDentista(){
+    const data = {
+      ncolegiatura: this.dentistaForm.get('nColegiatura')?.value??'',
+      especializacion: this.dentistaForm.get('especialidad')?.value??'',
+      usuarioId: this.dentistaForm.get('usuarioId')?.value??'',
+    };
+    this.dentistasService.updateDentista(this.dentistaTracked.id, data).subscribe({
+      next: (response) => {
+        this.toastService.success(response.mensaje);
+        this.loadUsuarios();
+        this.loadData();
+        this.modalCreate.close();
+      },
+      error: (error) => {
+        console.log('Error durante el registro:' + error.message);
+        this.toastService.error('Error durante el registro: ' + error.message);
+      }
+    });
+  }
+
+  eliminarDentista(){
+    this.dentistasService.deleteDentista(this.dentistaTracked.id).subscribe({
+      next: (response) => {
+        this.toastService.success(response.mensaje);
+        this.loadUsuarios();
+        this.loadData();
+        this.modalDelete.close();
       },
       error: (error) => {
         console.log('Error durante el registro:' + error.message);
