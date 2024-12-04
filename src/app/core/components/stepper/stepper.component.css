@@ -14,7 +14,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 .step-circle{
     background-color: #cecece;
@@ -29,37 +29,16 @@
     color: #fff;
     position: relative;
 }
-/*line entre cada bolita*/
-.step-line{
-    position: absolute;
-    right: 100%;
-    top: 50%;
-    width: 100px;
-    height: 3px;
-    background-color: #a4a4a4;
-}
+
 .step-circle.active{
     background-color: var(--first-color);
 }
 .step-line.active{
-    background-color: var(--first-color);
+    color: var(--first-color);
 }
-
-
 .progress-bar {
     background-color: var(--first-color);
 }
-
 .step-content {
     padding: 16px;
-}
-@media (width <= 1024px){
-    .step-line{
-        width: 160px;
-    }
-}
-@media (width <= 768px){
-    .step-line{
-        width: 80px;
-    }
 }

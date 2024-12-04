@@ -23,7 +23,7 @@
 }
 
 .datepicker-days div {
-    padding: 10px;
+    padding: 10%;
     cursor: pointer;
     display: flex;
     justify-content: center;

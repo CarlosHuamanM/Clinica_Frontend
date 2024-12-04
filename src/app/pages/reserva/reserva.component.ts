@@ -174,7 +174,10 @@ export class ReservaComponent implements OnInit {
       this.reservaForm.get('horario')?.get('fecha')?.setValue(formattedDate);
     }
     //obtener el dia de la fecha seleccionada
-    const dia = date.toLocaleString('es-ES', { weekday: 'long' }).toUpperCase();
+    let dia = date.toLocaleString('es-ES', { weekday: 'long' })
+      .normalize('NFD') // Descompone los caracteres con acento
+      .replace(/[\u0300-\u036f]/g, '') // Elimina los diacríticos
+      .toUpperCase();
     //filtrar horario por la fecha seleccionada
     const queryparams = {
       dentistaId: this.reservaForm.get('tipo')?.get('dentistaId')?.value,

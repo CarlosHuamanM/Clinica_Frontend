@@ -3,8 +3,18 @@
         <div class="steps-circles">
             <div *ngFor="let step of steps; let i = index" class="step-circle" [ngClass]="{'active': currentStep >= i}"
                 >{{i + 1}}
-                <span *ngIf="i != 0" [ngClass]="{'active': currentStep >= i}" class="step-line"></span>
             </div>
+        </div>
+        <div class="progress mt-2">
+            <div 
+                class="progress-bar" 
+                role="progressbar" 
+                [style.width.%]="(currentStep / (steps.length - 1)) * 100"
+                [attr.aria-valuenow]="currentStep"
+                [attr.aria-valuemin]="0"
+                [attr.aria-valuemax]="steps.length - 1">
+            </div>
+
         </div>
     </div>
 
