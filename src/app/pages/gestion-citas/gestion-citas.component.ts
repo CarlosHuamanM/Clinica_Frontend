@@ -40,7 +40,7 @@ export class GestionCitasComponent implements OnInit {
     this.loadData();
   }
   loadData(): void {
-    this.citaService.getCitas({dentistaId: this.dentistaId}).subscribe((data) => {
+    this.citaService.getCitas({ dentistaId: this.dentistaId }).subscribe((data) => {
       this.totalPagesCita = Math.ceil(data.length / 5);
       this.paginatedCitas = this.paginate(data, this.currentPageCita, 5);
     });
@@ -55,15 +55,15 @@ export class GestionCitasComponent implements OnInit {
     this.currentPageCita = page;
     this.loadData(); // Recargar los datos para la nueva página
   }
-  openModalToFocus(cita: Cita){
+  openModalToFocus(cita: Cita) {
     this.trackedCita = cita;
     this.modalAtender.open();
   }
-  openModalToCancel(cita: Cita){
+  openModalToCancel(cita: Cita) {
     this.trackedCita = cita;
     this.modalCancelar.open();
   }
-  atenderReserva(){
+  atenderReserva() {
     this.citaService.successCita(this.trackedCita.id).subscribe({
       next: (response) => {
         this.modalAtender.close();
@@ -72,11 +72,11 @@ export class GestionCitasComponent implements OnInit {
       },
       error: (error) => {
         this.modalAtender.close();
-        this.toastrService.error(error.error.mensaje);
+        this.toastrService.error(error.error.message);
       }
     })
   }
-  cancelarReserva(){
+  cancelarReserva() {
     this.citaService.deleteCita(this.trackedCita.id).subscribe({
       next: (response) => {
         this.modalCancelar.close();
@@ -85,14 +85,19 @@ export class GestionCitasComponent implements OnInit {
       },
       error: (error) => {
         this.modalCancelar.close();
-        this.toastrService.error(error.error.mensaje);
+        this.toastrService.error(error.error.message);
       }
     })
   }
   loadDataWithParams(): void {
-    this.citaService.getCitas({dentistaId: this.dentistaId, fechaInicio: this.formCitas.get('fechaInicio')?.value ?? '2024-11-01', fechaFin: this.formCitas.get('fechaFin')?.value ?? '2024-12-12', estado: this.formCitas.get('estado')?.value ?? 'Pendiente'}).subscribe((data) => {
-      this.totalPagesCita = Math.ceil(data.length / 5);
-      this.paginatedCitas = this.paginate(data, this.currentPageCita, 5);
+    this.citaService.getCitas({ dentistaId: this.dentistaId, fechaInicio: this.formCitas.get('fechaInicio')?.value ?? '2024-11-01', fechaFin: this.formCitas.get('fechaFin')?.value ?? '2024-12-12', estado: this.formCitas.get('estado')?.value ?? 'Pendiente' }).subscribe({
+      next: (data) => {
+        this.totalPagesCita = Math.ceil(data.length / 5);
+        this.paginatedCitas = this.paginate(data, this.currentPageCita, 5);
+      },
+      error: (error) => {
+        this.toastrService.error(error.error.message);
+      }
     });
   }
 }

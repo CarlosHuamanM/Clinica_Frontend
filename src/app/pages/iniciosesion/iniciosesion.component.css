@@ -86,15 +86,15 @@ form{
 
 .showpassword{
     display: flex;
+    position: relative;
 }
 .showpassword input{
     width: 100%;
-    position: relative;
 }
 .showpassword button{
-    width: 10%;
+    width: 20px;
     position: absolute;
-    transform: translateX(310px);
+    right: 10px;
     border: none;
 }
 
@@ -156,6 +156,9 @@ form{
         padding: 4px;
         width: 200px;
 
+    }
+    .titulo h1{
+        font-size: 1.5rem;
     }
 
 }

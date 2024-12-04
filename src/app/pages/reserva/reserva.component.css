@@ -20,7 +20,7 @@ input.invalid{
     .container-dashboard{
         flex-direction: column;
     }
-    full-calendar{
+    app-calendar{
         width: 100%;
     }
     app-stepper{

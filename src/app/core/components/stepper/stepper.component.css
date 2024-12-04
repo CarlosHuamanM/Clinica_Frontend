@@ -58,3 +58,8 @@
         width: 160px;
     }
 }
+@media (width <= 768px){
+    .step-line{
+        width: 80px;
+    }
+}

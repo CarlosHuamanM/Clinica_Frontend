@@ -115,11 +115,13 @@ export class GestionDentistasComponent implements OnInit {
   openModalToCreate(){
     this.accionFormlario = 'Nuevo dentista';
     this.dentistaForm.reset();
+    this.dentistaForm.get('nColegiatura')?.enable();
     this.modalCreate.open();
   }
   openModalToEdit(dentista: Dentista){
     this.accionFormlario = 'Editar dentista';
     this.dentistaTracked = dentista;
+    this.dentistaForm.get('nColegiatura')?.disable();
     this.dentistaForm.patchValue({
       nColegiatura: dentista.ncolegiatura,
       especialidad: dentista.especializacion,

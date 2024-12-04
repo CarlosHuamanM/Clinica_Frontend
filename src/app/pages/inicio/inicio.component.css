@@ -435,6 +435,9 @@
     color: #01CFC9;
     font-weight: 700;
 }
+.opiniones-card{
+    flex-wrap: wrap;
+}
 
 .opiniones .opiniones-card{
     margin-top: 60px;
@@ -484,7 +487,7 @@
     flex-direction: row;
     justify-content: space-between;
     gap: 20px;
-    height: 400px;
+    height: auto;
     padding: 1% 5%;
 }
 
@@ -617,6 +620,9 @@
     .datos {
         flex-direction: column;
         gap: 20px
+    }
+    .footer{
+        flex-wrap: wrap;
     }
 
 }
@@ -770,6 +776,12 @@
     .footer .clinica .redes .b {
         width: 40px; 
         height: 40px;
+    }
+    .condiciones, .horario{
+        margin-bottom: 50px;
+    }
+    .texto2{
+        width: 400px;
     }
 }
 

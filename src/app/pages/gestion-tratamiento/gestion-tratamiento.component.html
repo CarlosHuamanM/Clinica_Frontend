@@ -6,27 +6,28 @@
         </form>
         <button class="btn btn-blue" (click)="openModalToCreate()">Agregar</button>
     </div>
-
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Costo</th>
-                <th>Acción</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let tratamiento of paginatedTratamientos">
-                <td>{{ tratamiento.id }}</td>
-                <td>{{ tratamiento.nombre }}</td>
-                <td>S/ {{ tratamiento.costo }}</td>
-                <td><button class="btn btn-blue" (click)="openModalToUpdate(tratamiento)">Editar</button></td>
-                <td><button class="btn btn-blue" (click)="openModalToDelete(tratamiento)">Eliminar</button></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Costo</th>
+                    <th>Acción</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let tratamiento of paginatedTratamientos">
+                    <td>{{ tratamiento.id }}</td>
+                    <td>{{ tratamiento.nombre }}</td>
+                    <td>S/ {{ tratamiento.costo }}</td>
+                    <td><button class="btn btn-blue" (click)="openModalToUpdate(tratamiento)">Editar</button></td>
+                    <td><button class="btn btn-blue" (click)="openModalToDelete(tratamiento)">Eliminar</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <nav>
         <ul class="pagination justify-content-center">
             <li class="page-item" [ngClass]="{ 'disabled': currentPageTratamiento === 1 }">

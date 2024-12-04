@@ -98,8 +98,7 @@
   <div modal-body>
     <form [formGroup]="formReprogramar">
       <label class="form-label" for="fecha">Fecha:</label>
-      <input type="text" [disabled]="true" class="form-control" id="fecha" name="fecha" formControlName="fecha"
-      [class]="{'is-invalid': formReprogramar.get('fecha')?.invalid && formReprogramar.get('fecha')?.touched}">
+      <span class="text-dark fw-bold ms-2">{{formReprogramar.get('fecha')?.value}}</span>
       <app-datepicker [disabledDates]="disabledDates" [minDate]="minDate" [maxDate]="maxDate" (dateSelected)="handleDateSelected($event)"></app-datepicker>
       <small class="form-text text-danger"
         [hidden]="formReprogramar.get('fecha')?.valid || !formReprogramar.get('fecha')?.touched">La

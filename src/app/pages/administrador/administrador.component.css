@@ -1,6 +1,5 @@
 .content-container {
   flex-grow: 1;
-  margin: 20px 30px;
   padding: 20px;
   max-width: none;
   background-color: #fff;
@@ -21,7 +20,9 @@
 .btn-blue:hover {
   background-color: #469beb;
 }
-
+.pagination{
+  flex-wrap: wrap;
+}
 .pagination .page-item .page-link {
   color: #00485b;
   background-color: #ffffff;

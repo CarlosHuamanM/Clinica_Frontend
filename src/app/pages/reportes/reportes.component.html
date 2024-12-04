@@ -23,7 +23,7 @@
     <div class="col-md-6">
         <div class="bg-info text-white p-4 rounded text-center">
             <h2>Citas por tipo de tratamiento</h2>
-            <form [formGroup]="formCitasPorSexo">
+            <form [formGroup]="formCitasPorTipoTratamiento">
                 <label for="startDate">Desde</label>
                 <input type="date" class="form-control" id="startDate" name="startDate" formControlName="startDate"
                     [class]="{'is-invalid': formCitasPorSexo.get('startDate')?.invalid && formCitasPorSexo.get('startDate')?.touched}"
@@ -34,7 +34,7 @@
                     (change)="loadChartDataCitasPorTipoTratamiento(formCitasPorTipoTratamiento.get('startDate')?.value ?? '2024-11-01', formCitasPorTipoTratamiento.get('endDate')?.value ?? '2024-12-12')">
             </form>
             <button class="btn btn-primary w-100 mt-2"
-                (click)="downloadReportCitasPorTipo(formCitasPorSexo.get('startDate')?.value ?? '2024-11-01', formCitasPorSexo.get('endDate')?.value ?? '2024-12-12')"><i
+                (click)="downloadReportCitasPorTipo(formCitasPorTipoTratamiento.get('startDate')?.value ?? '2024-11-01', formCitasPorTipoTratamiento.get('endDate')?.value ?? '2024-12-12')"><i
                     class="bi bi-box-arrow-in-down"></i></button>
             <app-chart [type]="'bar'" [data]="dataCitasPorTipoTratamiento"
                 [options]="optionsCitasPorTipoTratamiento"></app-chart>
@@ -55,7 +55,7 @@
                     (change)="loadChartDataCitasCanceladas(formCitasCanceladas.get('startDate')?.value ?? '2024-11-01', formCitasCanceladas.get('endDate')?.value ?? '2024-12-12')">
             </form>
             <button class="btn btn-primary w-100 mt-2"
-                (click)="downloadReportCitasCanceladas(formCitasPorSexo.get('startDate')?.value ?? '2024-11-01', formCitasPorSexo.get('endDate')?.value ?? '2024-12-12')"><i
+                (click)="downloadReportCitasCanceladas(formCitasCanceladas.get('startDate')?.value ?? '2024-11-01', formCitasCanceladas.get('endDate')?.value ?? '2024-12-12')"><i
                     class="bi bi-box-arrow-in-down"></i></button>
             <app-chart [type]="'bar'" [data]="dataCitasCanceladas" [options]="optionsCitasCanceladas"></app-chart>
         </div>

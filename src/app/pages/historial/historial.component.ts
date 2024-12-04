@@ -28,7 +28,7 @@ export class HistorialComponent implements OnInit {
 
   formCitas = new FormGroup({
     fechaInicio: new FormControl('2024-11-01', Validators.required),
-    fechaFin: new FormControl('2024-12-12', Validators.required),
+    fechaFin: new FormControl('2024-12-12', [Validators.required]),
     estado: new FormControl('Pendiente', Validators.required),
   });
   
@@ -42,7 +42,7 @@ export class HistorialComponent implements OnInit {
   horarios!: Observable<Horario[]>;
   minDate: Date = new Date(new Date().setHours(0, 0, 0, 0));
   maxDate: Date = new Date(new Date().setMonth(new Date().getMonth() + 5, 0));
-  minTimeValue: string | undefined = ''; 
+  minTimeValue: string | undefined = '';
   maxTimeValue: string | undefined = '';
   disabledDates: Date[] = [];
   activeDaysOfWeek: number[] = [];
@@ -57,7 +57,7 @@ export class HistorialComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.formReprogramar = this.fb.group({
-      fecha: [{ value: '', disabled: true }, Validators.required],
+      fecha: [{ value: '' }, Validators.required],
       hora: [{ value: '', disabled: true }, Validators.required]
     });
   }
@@ -72,10 +72,15 @@ export class HistorialComponent implements OnInit {
     });
   }
   loadDataWithParams(): void {
-    this.citaService.getCitas({ usuarioId: this.userId, fechaInicio: this.formCitas.get('fechaInicio')?.value ?? '2024-11-01', fechaFin: this.formCitas.get('fechaFin')?.value ?? '2024-12-12', estado: this.formCitas.get('estado')?.value ?? 'Pendiente' }).subscribe((data) => {
+    this.citaService.getCitas({ usuarioId: this.userId, fechaInicio: this.formCitas.get('fechaInicio')?.value ?? '2024-11-01', fechaFin: this.formCitas.get('fechaFin')?.value ?? '2024-12-12', estado: this.formCitas.get('estado')?.value ?? 'Pendiente' }).subscribe({
+      next: (data) => {
       this.totalPagesCita = Math.ceil(data.length / 5);
       this.paginatedCitas = this.paginate(data, this.currentPageCita, 5);
-    });
+      },
+      error: (error) => {
+        this.toastService.error(error.error.message);
+      }
+  });
   }
   paginate(data: any[], currentPage: number, pageSize: number): any[] {
     const start = (currentPage - 1) * pageSize;
@@ -94,6 +99,7 @@ export class HistorialComponent implements OnInit {
   openModalToReprogramar(cita: Cita) {
     console.log(this.formReprogramar.value);
     this.formReprogramar.reset();
+    this.formReprogramar.get('hora')?.disable();
     this.formReprogramar.get('fecha')?.setValidators([Validators.required]);
     this.formReprogramar.get('hora')?.setValidators([Validators.required]);
     this.trackedCita = cita;

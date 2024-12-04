@@ -50,6 +50,11 @@ import { Component, Input } from '@angular/core';
       color: #777;
       margin: 5px 0 0;
     }
+    @media (width <= 1024px){
+      .user-name, .user-role{
+          font-size: 12px;
+      }
+    }
 
   `]
 })

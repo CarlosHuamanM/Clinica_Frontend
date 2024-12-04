@@ -34,7 +34,7 @@ export class RegistroComponent implements OnInit {
   @ViewChild('modal') modal!: ModalComponent;
 
   registerForm = new FormGroup({
-    email: new FormControl('', [Validators.required,Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     tipodocumento: new FormControl('', Validators.required),
     documento: new FormControl('', Validators.required),
     nombres: new FormControl('', Validators.required),
@@ -48,7 +48,7 @@ export class RegistroComponent implements OnInit {
       Validators.pattern('^[0-9]*$')
     ]),
     contrasena: new FormControl('', [Validators.required]),
-    confirmPassword: new FormControl('', {validators: [this.passwordMatchValidator.bind(this)]}),
+    confirmPassword: new FormControl('', { validators: [this.passwordMatchValidator.bind(this)] }),
     sexo: new FormControl('', Validators.required)
   });
 
@@ -86,15 +86,18 @@ export class RegistroComponent implements OnInit {
         Validators.maxLength(20)
       ]);
       this.mostrarBotonDni = false;
-    } else {
-      documentoControl?.clearValidators();
+    } if (tipoDocumento === 'CARNET EXT.') {
+      documentoControl?.setValidators([
+        Validators.required,
+        Validators.maxLength(20)
+      ]);
       this.mostrarBotonDni = false;
     }
 
     documentoControl?.updateValueAndValidity();
   }
 
-  obtenerNombresApellidos(){
+  obtenerNombresApellidos() {
     this.desactivarBotonDni = true;
     this.authService.getNamesWithReniecService(this.registerForm.get('documento')?.value ?? '').subscribe({
       next: (response) => {
@@ -110,7 +113,7 @@ export class RegistroComponent implements OnInit {
     this.desactivarBotonDni = false;
   }
 
-  enviarCodigoVerificacion(){
+  enviarCodigoVerificacion() {
     this.authService.getCode(this.registerForm.get('email')?.value ?? '').subscribe({
       next: (response) => {
         console.log(response);
@@ -124,10 +127,10 @@ export class RegistroComponent implements OnInit {
     });
   }
 
-  verificarCodigo(){
-    if(this.codigoControl.value === this.codigoGenerado){
+  verificarCodigo() {
+    if (this.codigoControl.value === this.codigoGenerado) {
       this.registrar();
-    }else{
+    } else {
       this.toastService.error('El código no es correcto');
     }
   }
@@ -143,15 +146,15 @@ export class RegistroComponent implements OnInit {
       this.registerForm.get('documento')?.value ?? '',
       this.registerForm.get('telefono')?.value ?? '',
       this.registerForm.get('sexo')?.value ?? '').subscribe({
-      next: (response) => {
-        localStorage.setItem('token', response.token);
-        this.router.navigate(['/dashboard/reserva']);
-        this.toastService.success('Bienvenido');
-      },
-      error: (error) => {
-        console.log('Error durante el registro:' + error.message);
-        this.toastService.error(error.error.message);
-      }
-    });
+        next: (response) => {
+          localStorage.setItem('token', response.token);
+          this.router.navigate(['/dashboard/reserva']);
+          this.toastService.success('Bienvenido');
+        },
+        error: (error) => {
+          console.log('Error durante el registro:' + error.message);
+          this.toastService.error(error.error.message);
+        }
+      });
   }
 }
