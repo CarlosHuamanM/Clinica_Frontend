@@ -34,6 +34,6 @@ export class CitaService {
   }
 
   editCita(citaId: number, data: any): Observable<any>{
-    return this.http.put<any>(this.baseUrl + 'reprogramar/' + citaId, data);
+    return this.http.put<any>(this.baseUrl + '/reprogramar/' + citaId, data);
   }
 }

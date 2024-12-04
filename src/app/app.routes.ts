@@ -15,15 +15,15 @@ import { GestionCitasComponent } from './pages/gestion-citas/gestion-citas.compo
 
 export const routes: Routes = [
     { path: '', redirectTo: 'inicio', pathMatch: 'full' },
-    { path: 'inicio', component: InicioComponent },
-    {path:'iniciosesion' ,component: IniciosesionComponent},
-    {path: 'registro', component: RegistroComponent},
-    {path: 'tratamientos', component: TratamientosComponent},
-    {path: 'blog', component: BlogComponent},
-    {path: 'historial', component: HistorialComponent},
-    {path: 'horarios', component: AgregarhorarioComponent},
+    { path: 'inicio', component: InicioComponent, title: 'Clinica Dental Villegas' },
+    {path:'iniciosesion' ,component: IniciosesionComponent, title: 'Inicio Sesion'},
+    {path: 'registro', component: RegistroComponent, title: 'Registro'},
+    {path: 'tratamientos', component: TratamientosComponent, title: 'Tratamientos'},
+    {path: 'blog', component: BlogComponent, title: 'Blog'},
     {path: 'dashboard' ,component: DashboardComponent, children: [
         {path: 'reserva' ,component: ReservaComponent, canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}},
+        {path: 'historial' ,component: HistorialComponent, canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}},
+        {path: 'horarios' ,component: AgregarhorarioComponent, canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}},
         {path: 'historial' ,component: HistorialComponent, canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}},
         {path: 'administrador' ,component: AdministradorComponent, canActivate: [roleGuard], data: {roles: ['ADMINISTRADOR']}},
         {path: 'reportes' ,component: ReportesComponent, canActivate: [roleGuard], data: {roles: ['DENTISTA', 'ADMINISTRADOR']}},

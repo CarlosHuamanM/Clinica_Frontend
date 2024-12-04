@@ -31,7 +31,7 @@ export class HistorialComponent implements OnInit {
     fechaFin: new FormControl('2024-12-12', [Validators.required]),
     estado: new FormControl('Pendiente', Validators.required),
   });
-  
+
   citaService = inject(CitaService);
   authService = inject(AuthService);
   horarioService = inject(HorarioService);
@@ -74,13 +74,13 @@ export class HistorialComponent implements OnInit {
   loadDataWithParams(): void {
     this.citaService.getCitas({ usuarioId: this.userId, fechaInicio: this.formCitas.get('fechaInicio')?.value ?? '2024-11-01', fechaFin: this.formCitas.get('fechaFin')?.value ?? '2024-12-12', estado: this.formCitas.get('estado')?.value ?? 'Pendiente' }).subscribe({
       next: (data) => {
-      this.totalPagesCita = Math.ceil(data.length / 5);
-      this.paginatedCitas = this.paginate(data, this.currentPageCita, 5);
+        this.totalPagesCita = Math.ceil(data.length / 5);
+        this.paginatedCitas = this.paginate(data, this.currentPageCita, 5);
       },
       error: (error) => {
         this.toastService.error(error.error.message);
       }
-  });
+    });
   }
   paginate(data: any[], currentPage: number, pageSize: number): any[] {
     const start = (currentPage - 1) * pageSize;
@@ -140,7 +140,7 @@ export class HistorialComponent implements OnInit {
       next: (data) => {
         this.toastService.success(data.mensaje);
         this.modalReprogramar.close();
-        this.loadDataWithParams();
+        this.loadData();
       },
       error: (error) => {
         console.error('Error al reprogramar la reserva:', error);
@@ -157,7 +157,10 @@ export class HistorialComponent implements OnInit {
       this.formReprogramar.get('fecha')?.setValue(formattedDate);
     }
     //obtener el dia de la fecha seleccionada
-    const dia = date.toLocaleString('es-ES', { weekday: 'long' }).toUpperCase();
+    let dia = date.toLocaleString('es-ES', { weekday: 'long' })
+      .normalize('NFD') // Descompone los caracteres con acento
+      .replace(/[\u0300-\u036f]/g, '') // Elimina los diacríticos
+      .toUpperCase(); // Convierte a mayúsculas
     //filtrar horario por la fecha seleccionada
     const queryparams = {
       dentistaId: this.trackedCita.dentista.id,
