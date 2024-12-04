@@ -6,7 +6,7 @@
                 {{respuesta.contenido}}
             </p>
             <div class="text-muted mt-2 text-end">
-                <small>{{respuesta.fecha}}</small>
+                <small>{{respuesta.fecha | date: 'medium'}}</small>
             </div>
         </div>
         <img [src]="respuesta.imagenUsuario" alt="User profile" class="respuesta-user-img ms-3" />

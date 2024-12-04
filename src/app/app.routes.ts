@@ -20,7 +20,7 @@ export const routes: Routes = [
     {path: 'registro', component: RegistroComponent, title: 'Registro'},
     {path: 'tratamientos', component: TratamientosComponent, title: 'Tratamientos'},
     {path: 'blog', component: BlogComponent, title: 'Blog'},
-    {path: 'dashboard' ,component: DashboardComponent, children: [
+    {path: 'dashboard' ,component: DashboardComponent, title: 'Dashboard', children: [
         {path: 'reserva' ,component: ReservaComponent, canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}},
         {path: 'historial' ,component: HistorialComponent, canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}},
         {path: 'horarios' ,component: AgregarhorarioComponent, canActivate: [roleGuard], data: {roles: ['PACIENTE', 'DENTISTA', 'ADMINISTRADOR']}},

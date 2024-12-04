@@ -3,11 +3,12 @@ import { AnswerComponent } from '../answer/answer.component';
 import { Comentario } from '../../interfaces/comentario';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ComentarioService } from '../../services/comentario.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-question',
   standalone: true,
-  imports: [AnswerComponent, ReactiveFormsModule],
+  imports: [AnswerComponent, ReactiveFormsModule, DatePipe],
   templateUrl: './question.component.html',
   styleUrl: './question.component.css'
 })

@@ -7,7 +7,7 @@
                 {{pregunta.contenido}}
             </p>
             <div class="d-flex justify-content-end text-muted mt-2" style="gap: 10px;">
-                <small>{{pregunta.fecha}}</small>
+                <small>{{pregunta.fecha | date: 'medium'}}</small>
                 <small>{{pregunta.comentarios.length}} respuestas</small>
                 <button class="btn btn-sm responder-btn ms-3" [hidden]="disabledButton" (click)="showResponseBox()">Responder</button>
             </div>
