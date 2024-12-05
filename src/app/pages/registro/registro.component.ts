@@ -81,6 +81,10 @@ export class RegistroComponent implements OnInit {
         Validators.pattern('^[0-9]*$')
       ]);
     } else if (tipoDocumento === 'PASAPORTE') {
+      this.registerForm.get('nombres')?.setValue('');
+      this.registerForm.get('apellidoPaterno')?.setValue('');
+      this.registerForm.get('apellidoMaterno')?.setValue('');
+      documentoControl?.setValue('');
       documentoControl?.setValidators([
         Validators.required,
         Validators.maxLength(20),
@@ -88,6 +92,10 @@ export class RegistroComponent implements OnInit {
       ]);
       this.mostrarBotonDni = false;
     } if (tipoDocumento === 'CARNET EXT.') {
+      this.registerForm.get('nombres')?.setValue('');
+      this.registerForm.get('apellidoPaterno')?.setValue('');
+      this.registerForm.get('apellidoMaterno')?.setValue('');
+      documentoControl?.setValue('');
       documentoControl?.setValidators([
         Validators.required,
         Validators.maxLength(20),

@@ -21,6 +21,9 @@ input.invalid{
     gap: 10px;
     margin-block: 5px;
 }
+.btn-custom{
+    width: 100%;
+}
 @media (width <= 1024px) {
     .container-dashboard{
         flex-direction: column;

@@ -69,6 +69,9 @@ export class ReservaComponent implements OnInit {
   //variables para el formulario
   reservaForm: FormGroup;
 
+  desactivarBotonDni= false;
+  mostrarBotonDni = false;
+
   ngOnInit() {
     this.tratamientos = this.tratamientoService.getTratamientos({});
     this.tiposTratamientos = this.tratamientoService.getTiposTratamientos();
@@ -113,6 +116,22 @@ export class ReservaComponent implements OnInit {
         fechaNacimiento: ['', [Validators.required]]
       })
     });
+  }
+
+  obtenerNombresApellidos() {
+    this.desactivarBotonDni = true;
+    this.authService.getNamesWithReniecService(this.reservaForm.get('paciente')?.get('numeroIdentidad')?.value ?? '').subscribe({
+      next: (response) => {
+        this.reservaForm.get('paciente')?.get('nombres')?.setValue(response.nombres);
+        this.reservaForm.get('paciente')?.get('apellidoPaterno')?.setValue(response.apellidoPaterno);
+        this.reservaForm.get('paciente')?.get('apellidoMaterno')?.setValue(response.apellidoMaterno);
+      },
+      error: (error) => {
+        console.log('Error:' + error.message);
+        this.toastService.error(error.error.message);
+      }
+    });
+    this.desactivarBotonDni = false;
   }
 
   convertirDuracionAMinutos(duracionISO: string): number {
@@ -209,14 +228,25 @@ export class ReservaComponent implements OnInit {
     const tipoDocumento = target.value;
     switch (tipoDocumento) {
       case "DNI":
+        this.mostrarBotonDni = true;
         this.reservaForm.get('paciente')?.get('numeroIdentidad')?.setValidators([Validators.required, Validators.minLength(8), Validators.maxLength(8),Validators.pattern('^[0-9]*$')]);
         this.reservaForm.get('paciente')?.get('numeroIdentidad')?.enable();
         break;
       case "PASAPORTE":
+        this.mostrarBotonDni = false;
+        this.reservaForm.get('paciente')?.get('nombres')?.setValue('');
+        this.reservaForm.get('paciente')?.get('apellidoPaterno')?.setValue('');
+        this.reservaForm.get('paciente')?.get('apellidoMaterno')?.setValue('');
+        this.reservaForm.get('paciente')?.get('numeroIdentidad')?.setValue('');
         this.reservaForm.get('paciente')?.get('numeroIdentidad')?.setValidators([Validators.required, Validators.maxLength(20), Validators.pattern('^[0-9]*$')]);
         this.reservaForm.get('paciente')?.get('numeroIdentidad')?.enable();
         break;
       case "CARNET EXT.":
+        this.mostrarBotonDni = false;
+        this.reservaForm.get('paciente')?.get('nombres')?.setValue('');
+        this.reservaForm.get('paciente')?.get('apellidoPaterno')?.setValue('');
+        this.reservaForm.get('paciente')?.get('apellidoMaterno')?.setValue('');
+        this.reservaForm.get('paciente')?.get('numeroIdentidad')?.setValue('');
         this.reservaForm.get('paciente')?.get('numeroIdentidad')?.setValidators([Validators.required, Validators.maxLength(20), Validators.pattern('^[0-9]*$')]);
         this.reservaForm.get('paciente')?.get('numeroIdentidad')?.enable();
         break;

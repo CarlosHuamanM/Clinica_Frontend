@@ -66,9 +66,12 @@
                     [class]="{'is-invalid': reservaForm.get('paciente')?.get('numeroIdentidad')?.invalid && reservaForm.get('paciente')?.get('numeroIdentidad')?.touched}">
                 <small class="form-text text-danger"
                     [hidden]="reservaForm.get('paciente')?.get('numeroIdentidad')?.valid || !reservaForm.get('paciente')?.get('numeroIdentidad')?.touched"></small>
-
+                <button type="button" class="btn btn-primary btn-custom mt-1" (click)="obtenerNombresApellidos()"
+                    [disabled]="reservaForm.get('tipoDocumento')?.invalid || desactivarBotonDni"
+                    [hidden]="!mostrarBotonDni">Obtener Nombres y Apellidos</button>
                 <label for="nombre-paciente-label" class="form-label">Nombres del paciente:</label>
                 <input type="text" class="form-control" id="nombre-paciente-label" formControlName="nombres"
+                    [readOnly]="mostrarBotonDni"
                     [class]="{'is-invalid': reservaForm.get('paciente')?.get('nombres')?.invalid && reservaForm.get('paciente')?.get('nombres')?.touched}">
                 <small class="form-text text-danger"
                     [hidden]="reservaForm.get('paciente')?.get('nombres')?.valid || !reservaForm.get('paciente')?.get('nombres')?.touched">El
@@ -76,6 +79,7 @@
 
                 <label for="apellidop-paciente-label" class="form-label mt-2">Apellido paterno:</label>
                 <input type="text" class="form-control" id="apellidop-paciente-label" formControlName="apellidoPaterno"
+                [readOnly]="mostrarBotonDni"
                     [class]="{'is-invalid': reservaForm.get('paciente')?.get('apellidoPaterno')?.invalid && reservaForm.get('paciente')?.get('apellidoPaterno')?.touched}">
                 <small class="form-text text-danger"
                     [hidden]="reservaForm.get('paciente')?.get('apellidoPaterno')?.valid || !reservaForm.get('paciente')?.get('apellidoPaterno')?.touched">El
@@ -84,6 +88,7 @@
 
                 <label for="apellidom-paciente-label" class="form-label mt-2">Apellido materno:</label>
                 <input type="text" class="form-control" id="apellidom-paciente-label" formControlName="apellidoMaterno"
+                [readOnly]="mostrarBotonDni"
                     [class]="{'is-invalid': reservaForm.get('paciente')?.get('apellidoMaterno')?.invalid && reservaForm.get('paciente')?.get('apellidoMaterno')?.touched}">
                 <small class="form-text text-danger"
                     [hidden]="reservaForm.get('paciente')?.get('apellidoMaterno')?.valid || !reservaForm.get('paciente')?.get('apellidoMaterno')?.touched">El
@@ -103,7 +108,7 @@
                     <label for="femenino">Femenino</label>
                 </div>
             </div>
-            <button [disabled]="reservaForm.invalid" [hidden]="ocultarBotonReserva" class="btn btn-primary" (click)="guardarReserva()">Reservar</button>
+            <button [disabled]="reservaForm.invalid" [hidden]="ocultarBotonReserva" class="btn btn-primary bt-custom" (click)="guardarReserva()">Reservar</button>
         </ng-template>
     </app-stepper>
     <app-calendar [citas]="citas"></app-calendar>
