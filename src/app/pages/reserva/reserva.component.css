@@ -16,6 +16,11 @@ app-calendar{
 input.invalid{
     border: 1px solid red !important;
 }
+.gender{
+    display: flex;
+    gap: 10px;
+    margin-block: 5px;
+}
 @media (width <= 1024px) {
     .container-dashboard{
         flex-direction: column;

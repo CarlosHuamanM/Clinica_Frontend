@@ -45,11 +45,11 @@
         <div class="bg-primary text-white p-4 rounded text-center">
             <h2 class="text-dark">Citas por estado</h2>
             <form [formGroup]="formCitasCanceladas">
-                <label for="startDate">Desde</label>
+                <label for="startDate" class="text-dark">Desde</label>
                 <input type="date" class="form-control" id="startDate" name="startDate" formControlName="startDate"
                     [class]="{'is-invalid': formCitasCanceladas.get('startDate')?.invalid && formCitasCanceladas.get('startDate')?.touched}"
                     (change)="loadChartDataCitasCanceladas(formCitasCanceladas.get('startDate')?.value ?? '2024-11-01', formCitasCanceladas.get('endDate')?.value ?? '2024-12-12')">
-                <label for="endDate">Hasta</label>
+                <label for="endDate" class="text-dark">Hasta</label>
                 <input type="date" class="form-control" id="endDate" name="endDate" formControlName="endDate"
                     [class]="{'is-invalid': formCitasCanceladas.get('endDate')?.invalid && formCitasCanceladas.get('endDate')?.touched}"
                     (change)="loadChartDataCitasCanceladas(formCitasCanceladas.get('startDate')?.value ?? '2024-11-01', formCitasCanceladas.get('endDate')?.value ?? '2024-12-12')">
@@ -64,15 +64,15 @@
         <div class="bg-primary text-white p-4 rounded text-center">
             <h2 class="text-dark">Numero de citas por dentista</h2>
             <form [formGroup]="formCitasPorDentista">
-                <label for="startDate">Desde</label>
+                <label for="startDate" class="text-dark">Desde</label>
                 <input type="date" class="form-control" id="startDate" name="startDate" formControlName="startDate"
                     [class]="{'is-invalid': formCitasPorDentista.get('startDate')?.invalid && formCitasPorDentista.get('startDate')?.touched}"
                     (change)="loadDataCitasPorDentista(formCitasPorDentista.get('startDate')?.value ?? '2024-11-01', formCitasPorDentista.get('endDate')?.value ?? '2024-12-12', formCitasPorDentista.get('estado')?.value ?? 'Pendiente')">
-                <label for="endDate">Hasta</label>
+                <label for="endDate" class="text-dark">Hasta</label>
                 <input type="date" class="form-control" id="endDate" name="endDate" formControlName="endDate"
                     [class]="{'is-invalid': formCitasPorDentista.get('endDate')?.invalid && formCitasPorDentista.get('endDate')?.touched}"
                     (change)="loadDataCitasPorDentista(formCitasPorDentista.get('startDate')?.value ?? '2024-11-01', formCitasPorDentista.get('endDate')?.value ?? '2024-12-12', formCitasPorDentista.get('estado')?.value ?? 'Pendiente')">
-                <label for="estado">Estado</label>
+                <label for="estado" class="text-dark">Estado</label>
                 <select class="form-select" id="estado" name="estado" formControlName="estado"
                     (change)="loadDataCitasPorDentista(formCitasPorDentista.get('startDate')?.value ?? '2024-11-01', formCitasPorDentista.get('endDate')?.value ?? '2024-12-12', formCitasPorDentista.get('estado')?.value ?? 'Pendiente')">
                     <option value="Pendiente">Pendiente</option>
@@ -106,7 +106,7 @@
     </div>
 </div>
 @if (userRole === 'ADMINISTRADOR') {
-    <div class="row gy-4 mb-5 bg-dark text-white p-4 rounded text-center">
+    <div class="row gy-4 mb-5 bg-custom text-white p-4 rounded text-center">
         <h2>Historial de reportes</h2>
         <table class="table table-striped table-bordered mt-2">
             <thead>

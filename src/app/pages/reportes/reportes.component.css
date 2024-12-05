@@ -36,6 +36,9 @@ nav{
 .pagination .page-item .page-link.active {
     background-color: #022859;
     color: #ffffff;
-    border-color: #022859;
+    border-color: #ffffff;
     font-weight: bold;
+}
+.bg-custom{
+    background-color: #112862;
 }

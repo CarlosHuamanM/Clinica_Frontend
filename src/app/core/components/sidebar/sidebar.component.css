@@ -93,6 +93,7 @@ a {
     color: var(--first-color-light);
     margin-bottom: 1.5rem;
     transition: .3s;
+    cursor: pointer;
 }
 
 .nav_link:hover {

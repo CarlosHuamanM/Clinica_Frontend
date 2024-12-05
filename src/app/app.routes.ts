@@ -16,7 +16,7 @@ import { GestionCitasComponent } from './pages/gestion-citas/gestion-citas.compo
 export const routes: Routes = [
     { path: '', redirectTo: 'inicio', pathMatch: 'full' },
     { path: 'inicio', component: InicioComponent, title: 'Clinica Dental Villegas' },
-    {path:'iniciosesion' ,component: IniciosesionComponent, title: 'Inicio Sesion'},
+    {path:'iniciosesion' ,component: IniciosesionComponent, title: 'Inicio de sesión'},
     {path: 'registro', component: RegistroComponent, title: 'Registro'},
     {path: 'tratamientos', component: TratamientosComponent, title: 'Tratamientos'},
     {path: 'blog', component: BlogComponent, title: 'Blog'},
