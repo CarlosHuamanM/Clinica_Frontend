@@ -56,19 +56,19 @@
                 [class]="{'is-invalid': formTratamiento.get('nombre')?.invalid && formTratamiento.get('nombre')?.touched}">
             <small class="form-text text-danger"
                 [hidden]="formTratamiento.get('nombre')?.valid || !formTratamiento.get('nombre')?.touched">El
-                nombre es obligatorio.</small>
+                nombre es obligatorio.</small><br>
             <label class="form-label" for="descripcion">Descripción:</label>
             <textarea class="form-control" id="descripcion" name="descripcion" formControlName="descripcion"
                 [class]="{'is-invalid': formTratamiento.get('descripcion')?.invalid && formTratamiento.get('descripcion')?.touched}"></textarea>
             <small class="form-text text-danger"
                 [hidden]="formTratamiento.get('descripcion')?.valid || !formTratamiento.get('descripcion')?.touched">La
-                descripción es obligatoria.</small>
+                descripción es obligatoria.</small><br>
             <label class="form-label" for="costo">Costo:</label>
             <input class="form-control" type="number" id="costo" name="costo" min="0" formControlName="costo"
                 [class]="{'is-invalid': formTratamiento.get('costo')?.invalid && formTratamiento.get('costo')?.touched}">
             <small class="form-text text-danger"
                 [hidden]="formTratamiento.get('costo')?.valid || !formTratamiento.get('costo')?.touched">El
-                costo es obligatorio.</small>
+                costo es obligatorio.</small><br>
             <label class="form-label" for="duracion">Duración:</label>
             <select formControlName="duracion" class="form-select" id="duracion" name="duracion"
                 [class]="{'is-invalid': formTratamiento.get('duracion')?.invalid && formTratamiento.get('duracion')?.touched}">

@@ -44,7 +44,7 @@ export class GestionDentistasComponent implements OnInit {
   dentistaForm = new FormGroup({
     nColegiatura: new FormControl('', [Validators.minLength(5), Validators.maxLength(5)]),
     especialidad: new FormControl('', Validators.required),
-    usuarioId: new FormControl({value: '', disabled: true}, Validators.required),
+    usuarioId: new FormControl('', Validators.required),
   })
 
   usuarioBusqueda = new FormGroup({

@@ -51,17 +51,19 @@
            <form [formGroup]="tipoDocumentoForm">
                <div class="form-group">
                    <label for="nombre" class="form-label">Nombre</label>
-                   <input type="text" class="form-control" formControlName="nombre" id="nombre" placeholder="Nombre">
+                   <input type="text" class="form-control" formControlName="nombre" id="nombre" placeholder="Nombre"
+                   [class]="{'is-invalid': tipoDocumentoForm.get('nombre')?.invalid && tipoDocumentoForm.get('nombre')?.touched}">
                </div>
                <div class="form-group">
                    <label for="acronimo" class="form-label">Acrónimo</label>
-                   <input type="text" class="form-control" formControlName="acronimo" id="acronimo" placeholder="Acrónimo">
+                   <input type="text" class="form-control" formControlName="acronimo" id="acronimo" placeholder="Acrónimo"
+                   [class]="{'is-invalid': tipoDocumentoForm.get('acronimo')?.invalid && tipoDocumentoForm.get('acronimo')?.touched}">
                </div>
            </form>
        </div>
        <div modal-footer>
            <button type="button" class="btn btn-blue" (click)="modal.close()">Cancelar</button>
-           <button type="button" class="btn btn-blue ms-2" (click)="registroTipoDocumento()">Guardar</button>
+           <button type="button" class="btn btn-blue ms-2" (click)="registroTipoDocumento()" [disabled]="tipoDocumentoForm.invalid">Crear</button>
        </div>
     </app-modal>
     <app-modal #modalDelete>

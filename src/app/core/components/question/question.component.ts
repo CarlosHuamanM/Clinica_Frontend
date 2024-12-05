@@ -4,6 +4,7 @@ import { Comentario } from '../../interfaces/comentario';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ComentarioService } from '../../services/comentario.service';
 import { DatePipe } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-question',
@@ -22,6 +23,7 @@ export class QuestionComponent {
   @Output() recargarComentarios = new EventEmitter<void>();
 
   comentarioService = inject(ComentarioService);
+  toastService = inject(ToastrService);
 
   respuestaDentista = new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]);
 
@@ -41,13 +43,12 @@ export class QuestionComponent {
         this.trackedQuestionId
       ).subscribe({
         next: (response) => {
-          alert(response.mensaje);
+          this.toastService.success(response.mensaje);
           this.respuestaDentista.reset();
           this.recargarComentarios.emit();
         },
         error: (error) => {
           console.log('Error durante el comentario:' + error.message);
-          alert(error.message);
         }
       })
     }

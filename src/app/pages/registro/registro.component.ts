@@ -83,13 +83,15 @@ export class RegistroComponent implements OnInit {
     } else if (tipoDocumento === 'PASAPORTE') {
       documentoControl?.setValidators([
         Validators.required,
-        Validators.maxLength(20)
+        Validators.maxLength(20),
+        Validators.pattern('^[0-9]*$')
       ]);
       this.mostrarBotonDni = false;
     } if (tipoDocumento === 'CARNET EXT.') {
       documentoControl?.setValidators([
         Validators.required,
-        Validators.maxLength(20)
+        Validators.maxLength(20),
+        Validators.pattern('^[0-9]*$')
       ]);
       this.mostrarBotonDni = false;
     }

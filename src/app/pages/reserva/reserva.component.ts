@@ -108,7 +108,7 @@ export class ReservaComponent implements OnInit {
         apellidoPaterno: ['', Validators.required],
         apellidoMaterno: ['', Validators.required],
         tipoDocumento: ['', Validators.required],
-        numeroIdentidad: [{ value: '', disabled: true }, Validators.required],
+        numeroIdentidad: [{ value: '', disabled: true }, [Validators.required, Validators.pattern('^[0-9]*$')]],
         sexo: ['', Validators.required],
         fechaNacimiento: ['', [Validators.required]]
       })
@@ -209,15 +209,15 @@ export class ReservaComponent implements OnInit {
     const tipoDocumento = target.value;
     switch (tipoDocumento) {
       case "DNI":
-        this.reservaForm.get('paciente')?.get('numeroIdentidad')?.setValidators([Validators.required, Validators.minLength(8), Validators.maxLength(8)]);
+        this.reservaForm.get('paciente')?.get('numeroIdentidad')?.setValidators([Validators.required, Validators.minLength(8), Validators.maxLength(8),Validators.pattern('^[0-9]*$')]);
         this.reservaForm.get('paciente')?.get('numeroIdentidad')?.enable();
         break;
       case "PASAPORTE":
-        this.reservaForm.get('paciente')?.get('numeroIdentidad')?.setValidators([Validators.required, Validators.maxLength(20)]);
+        this.reservaForm.get('paciente')?.get('numeroIdentidad')?.setValidators([Validators.required, Validators.maxLength(20), Validators.pattern('^[0-9]*$')]);
         this.reservaForm.get('paciente')?.get('numeroIdentidad')?.enable();
         break;
       case "CARNET EXT.":
-        this.reservaForm.get('paciente')?.get('numeroIdentidad')?.setValidators([Validators.required, Validators.maxLength(20)]);
+        this.reservaForm.get('paciente')?.get('numeroIdentidad')?.setValidators([Validators.required, Validators.maxLength(20), Validators.pattern('^[0-9]*$')]);
         this.reservaForm.get('paciente')?.get('numeroIdentidad')?.enable();
         break;
       default:

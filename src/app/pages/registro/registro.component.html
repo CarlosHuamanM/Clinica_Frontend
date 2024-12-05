@@ -28,8 +28,7 @@
                         <input type="date" formControlName="fechanacimiento" id="dob" class="form-control" required
                             [class]="{'invalid': registerForm.get('fechanacimiento')?.invalid && registerForm.get('fechanacimiento')?.touched}">
                         <small class="form-text text-danger"
-                            [hidden]="!registerForm.get('fechanacimiento')?.invalid || !registerForm.get('fechanacimiento')?.touched">Ingrese
-                            un fecha válida</small>
+                            [hidden]="!registerForm.get('fechanacimiento')?.hasError('edadInvalida') || !registerForm.get('fechanacimiento')?.touched">No es mayor de edad</small>
 
                     </div>
                 </div>

@@ -62,11 +62,13 @@
     <div modal-body>
         <form [formGroup]="dentistaForm">
             <label for="nColegiatura" class="form-label">Número de colegiatura</label>
-            <input type="text" class="form-control" formControlName="nColegiatura" id="nColegiatura" placeholder="Número de colegiatura">
+            <input type="text" class="form-control" formControlName="nColegiatura" id="nColegiatura" placeholder="Número de colegiatura"
+            [class]="{'is-invalid': dentistaForm.get('nColegiatura')?.invalid && dentistaForm.get('nColegiatura')?.touched}">
             <label for="especialidad" class="form-label mt-1">Especialidad</label>
-            <input type="text" class="form-control" formControlName="especialidad" id="especialidad" placeholder="Especialidad">
+            <input type="text" class="form-control" formControlName="especialidad" id="especialidad" placeholder="Especialidad"
+            [class]="{'is-invalid': dentistaForm.get('especialidad')?.invalid && dentistaForm.get('especialidad')?.touched}">
             <label for="usuarioId" class="form-label mt-1">Seleccionar usuario</label>
-            <input type="text" class="form-control" formControlName="usuarioId" id="usuarioId" placeholder="Usuario seleccionado">
+            <input type="text" class="form-control" formControlName="usuarioId" id="usuarioId" placeholder="Usuario seleccionado" readonly>
             
             <table class="table table-striped table-bordered mt-2">
                 <thead>
